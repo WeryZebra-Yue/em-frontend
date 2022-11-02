@@ -1,0 +1,19 @@
+.Header{
+    background-color: #e0d9ca;
+    color: #fff;
+  
+    position: fixed;
+    width: 100%;
+    /* text-align: center; */
+}
+.Header div img{
+    /* width: 100px; */
+    height: 50px;
+    margin: 20px;
+    /* border-radius: 50%; */
+    /* margin: 0 auto; */
+    display: block;
+}
+.submit{
+    
+}

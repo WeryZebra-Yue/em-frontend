@@ -1,2 +1,2 @@
-import Home from "./SuperAdmin";
-export default Home;
+import Admin from "./Admin";
+export default Admin;

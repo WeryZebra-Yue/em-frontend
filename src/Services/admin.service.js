@@ -41,3 +41,47 @@ export const updateExaminer = async (user) => {
     throw err;
   }
 };
+export const getAdmins = async () => {
+  try {
+    const { data } = await axios.get(ADMIN_URL + "/getAdmins");
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const addAdmin = async (user) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/addAdmin", user);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const getPassword = async (email) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/getPassword", {
+      email: email,
+    });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const updateAdmin = async (user) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/updateAdmin", user);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const verifyToken = async (token) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/verifyToken", {
+      token: token,
+    });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

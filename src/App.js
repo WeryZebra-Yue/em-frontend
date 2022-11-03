@@ -8,6 +8,7 @@ import Add from "./Containers/Add";
 import { uploadImage } from "./Services/storage.service";
 import Open from "./Containers/Open";
 import Edit from "./Containers/Edit";
+import Admin from "./Containers/Admin";
 
 const App = () => {
   return (
@@ -29,7 +30,7 @@ const App = () => {
           <Edit />
         </Route>
         <Route exact path="/admin">
-          <Edit />
+          <Admin />
         </Route>
         <Route exact path="/*">
           <div

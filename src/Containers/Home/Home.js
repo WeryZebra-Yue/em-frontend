@@ -52,12 +52,20 @@ const Home = () => {
                   const cookie = new Cookies();
                   cookie.set("token-ex", response.token, {
                     path: "/",
+                    maxAge: 3600,
                   });
 
                   // console.log(response);
-                  history.push("/dashboard", {
-                    token: response.token,
-                  });
+                  if (
+                    email === "admin@ppsu.db" ||
+                    email === "developer@ppsu.db"
+                  ) {
+                    history.push("/admin");
+                  } else {
+                    history.push("/dashboard", {
+                      token: response.token,
+                    });
+                  }
                 } else if (response.status === 400) {
                   toast.error(response.message, {
                     autoClose: 5000,
@@ -89,7 +97,7 @@ const Home = () => {
               <div className={styles.captcha}>
                 <div>Please tick this box to continue</div>
                 <ReCAPTCHA
-                  sitekey="6LeWOV0iAAAAAI7zRPFKRlux_m_q-c_WwbtvoQdj"
+                  sitekey="6LceztAiAAAAAJwQ2pUappnajHm1DPHegBu-dMCF"
                   onChange={(e) => {
                     setCaptacha(true);
                   }}

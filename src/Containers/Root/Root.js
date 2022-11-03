@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,21 +16,30 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { Cookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
-import { getAllExaminers } from "../../Services/admin.service";
+import { getAllExaminers, verifyToken } from "../../Services/admin.service";
 import cellEditFactory from "react-bootstrap-table2-editor";
 function Root({ props }) {
   const { SearchBar } = Search;
   const history = useHistory();
-  const [data, setData] = React.useState([]);
-  useEffect(() => {
+  const [data, setData] = useState([]);
+  const [permission, setPemission] = useState(["READ"]);
+  const WritePermission = () => {
+    setPemission(["WRITE"]);
+    console.log(permission);
+  };
+  useEffect(async () => {
     const cookie = new Cookies();
+
     const token = cookie.get("token-ex");
     if (!token) {
       history.push("/");
     } else {
       toast.loading("Loading Data");
-      const response = getAllExaminers(token);
-      response.then((res) => {
+      const response = await verifyToken(token);
+      if (response.role === "WRITE") {
+        setPemission(["WRITE"]);
+      }
+      const res = await getAllExaminers(token).then((res) => {
         toast.dismiss();
         setData(res);
         // console.log(res);
@@ -90,14 +99,16 @@ function Root({ props }) {
             >
               Open
             </button>
-            <button
-              onClick={() => {
-                history.push("/edit", row);
-              }}
-              className={styles.add + " " + styles.button}
-            >
-              Edit
-            </button>
+            {permission[0] === "WRITE" && (
+              <button
+                onClick={() => {
+                  history.push("/edit", row);
+                }}
+                className={styles.add + " " + styles.button}
+              >
+                Edit
+              </button>
+            )}
           </div>
         );
       },
@@ -236,7 +247,8 @@ function Root({ props }) {
           style={{
             display: "flex",
             width: "90%",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <button
@@ -252,6 +264,22 @@ function Root({ props }) {
             }}
           >
             + New Examiner
+          </button>
+          <button
+            className={styles.button + " " + styles.delete}
+            variant="contained"
+            color="primary"
+            style={{
+              margin: "0px",
+              marginTop: "20px",
+            }}
+            onClick={() => {
+              const cookie = new Cookies();
+              cookie.remove("token-ex");
+              history.push("/");
+            }}
+          >
+            Sign Out
           </button>
         </div>
         <br />

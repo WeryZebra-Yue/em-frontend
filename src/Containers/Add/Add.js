@@ -440,7 +440,8 @@ function Add() {
                   required
                   name="bankPassbook"
                   accept="image/*"
-                  placeholder="Upload Resume"
+                  type={"file"}
+                  placeholder="Bank Passbook"
                 />
               </div>
               <div className={styles.component}>
@@ -451,7 +452,7 @@ function Add() {
                   name="cancelledCheque"
                   type="file"
                   accept="image/*"
-                  placeholder="Upload Resume"
+                  placeholder="Bank Passbook"
                 />
               </div>
               <div className={styles.submitWrapper}>

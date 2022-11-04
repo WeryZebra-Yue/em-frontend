@@ -444,7 +444,6 @@ function Add() {
                 />
               </div>
               <div className={styles.component}>
-                type="file"
                 <div className={styles.lable}>Cancelled cheque</div>
                 <input
                   required

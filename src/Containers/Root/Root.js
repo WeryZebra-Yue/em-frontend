@@ -47,73 +47,73 @@ function Root({ props }) {
         const json = xlsx.utils.sheet_to_json(worksheet);
         let newData = [...data];
         console.log(json);
-        //     json.map((item) => {
-        //       console.log(item);
-        //       const res = {
-        //         e_id: item.Code,
-        //         personalDetails: {
-        //           name: item.Name,
-        //           phonenumber: item.Mobile,
-        //           collegeemail: item["Institute Mail"],
-        //           personalEmail: item["Personal Email"],
-        //         },
-        //         instituteDetails: {
-        //           institutename: item.Institute,
-        //           // distance: item.Distance,
-        //           role: item["Role of faculty"],
-        //         },
-        //         roles: [item["Category"]],
-        //         documents: {
-        //           bankDetails: {
-        //             ifscCode: item.IFSC,
-        //             bankName: item["Bank Name"],
-        //             accountNumber: item["Account No."],
-        //           },
-        //         },
-        //       };
-        //       // console.log(res);
-        //       newData.push(res);
-        //     });
-        //     let Length = newData.length;
-        //     console.log(Length);
-        //     for (let i = Length - json.length; i < Length; i++) {
-        //       newData[i].personalDetails.name = newData[i].personalDetails["name"]
-        //         .replace("Mr.", "")
-        //         .replace("Ms.", "")
-        //         .replace("Dr.", "");
+        json.map((item) => {
+          console.log(item);
+          const res = {
+            e_id: item.Code,
+            personalDetails: {
+              name: item.Name,
+              phonenumber: item.Mobile,
+              collegeemail: item["Institute Mail"],
+              personalEmail: item["Personal Email"],
+            },
+            instituteDetails: {
+              institutename: item.Institute,
+              // distance: item.Distance,
+              role: item["Role of faculty"],
+            },
+            roles: [item["Category"]],
+            documents: {
+              bankDetails: {
+                ifscCode: item.IFSC,
+                bankName: item["Bank Name"],
+                accountNumber: item["Account No."],
+              },
+            },
+          };
+          // console.log(res);
+          newData.push(res);
+        });
+        let Length = newData.length;
+        console.log(Length);
+        for (let i = Length - json.length; i < Length; i++) {
+          newData[i].personalDetails.name = newData[i].personalDetails["name"]
+            .replace("Mr.", "")
+            .replace("Ms.", "")
+            .replace("Dr.", "");
 
-        //       console.log(newData[i]);
-        //       for (let j = 0; j < Length; j++) {
-        //         if (i != j) {
-        //           console.log(i);
+          console.log(newData[i]);
+          for (let j = 0; j < Length; j++) {
+            if (i != j) {
+              console.log(i);
 
-        //           if (
-        //             newData[i].personalDetails.collegeemail ===
-        //             newData[j]?.personalDetails.collegeemail
-        //           ) {
-        //             newData[j].roles = newData[j]?.roles.concat(newData[i].roles);
-        //             const update = await updateExaminer({
-        //               user: newData[j],
-        //             });
-        //             newData[i] = null;
-        //             console.log(i);
-        //             break;
-        //             // Length--;
-        //           }
-        //         }
-        //       }
-        //     }
-        //     let finalData = [];
-        //     for (let i = Length - json.length; i < Length; i++) {
-        //       if (newData[i] !== null) {
-        //         finalData.push(newData[i]);
-        //       }
-        //     }
-        //     addMultipleUsers(finalData).then((res) => {
-        //       console.log(res);
-        //       toast.dismiss(loading);
-        //       toast.success("Users Added Successfully");
-        //     });
+              if (
+                newData[i].personalDetails.collegeemail ===
+                newData[j]?.personalDetails.collegeemail
+              ) {
+                newData[j].roles = newData[j]?.roles.concat(newData[i].roles);
+                const update = await updateExaminer({
+                  user: newData[j],
+                });
+                newData[i] = null;
+                console.log(i);
+                break;
+                // Length--;
+              }
+            }
+          }
+        }
+        let finalData = [];
+        for (let i = Length - json.length; i < Length; i++) {
+          if (newData[i] !== null) {
+            finalData.push(newData[i]);
+          }
+        }
+        addMultipleUsers(finalData).then((res) => {
+          console.log(res);
+          toast.dismiss(loading);
+          toast.success("Users Added Successfully");
+        });
       };
       reader.readAsArrayBuffer(e.target.files[0]);
     }
@@ -405,8 +405,101 @@ function Root({ props }) {
                 marginTop: "20px",
               }}
               onClick={() => {
-                xlsx.writeFile(data, "Examiner.xlsx");
-                // download excel
+                let detailsData = [];
+                data.forEach((item) => {
+                  //   dataField: "personalDetails.name",
+                  //   text: "Name",
+                  // },
+                  // {
+                  //   dataField: "personalDetails.phonenumber",
+                  //   text: "Mobile",
+                  // },
+                  // {
+                  //   dataField: "instituteDetails.institutename",
+                  //   text: "Institute",
+                  // },
+                  // {
+                  //   dataField: "personalDetails.personalEmail",
+                  //   text: "Personal Email",
+                  // },
+                  // {
+                  //   dataField: "personalDetails.collegeemail",
+                  //   text: "Institute Mail",
+                  // },
+                  // {
+                  //   dataField: "instituteDetails.role",
+                  //   text: "Role of faculty",
+                  // },
+                  // {
+                  //   dataField: "personalDetails.areaofinterest",
+                  //   text: "areaofinterest",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "roles",
+                  //   text: "category",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.rcbook",
+                  //   text: "rcbook",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.drivinglicense",
+                  //   text: "drivinglicense",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.bankdetails.bankName",
+                  //   text: "bankdetails",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.bankdetails.accountNumber",
+                  //   text: "accountno",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.bankdetails.ifsccode",
+                  //   text: "ifsccode",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.passbook",
+                  //   text: "bankpassbook",
+                  //   hidden: true,
+                  // },
+                  // {
+                  //   dataField: "documents.cheque",
+                  //   text: "cheque",
+                  //   hidden: true,
+                  // },
+                  let obj = {
+                    Name: item?.personalDetails?.name,
+                    Mobile: item?.personalDetails?.phonenumber,
+                    Institute: item?.instituteDetails?.institutename,
+                    "Personal Email": item?.personalDetails?.personalEmail,
+                    "Institute Mail": item?.personalDetails?.collegeemail,
+                    "Role of faculty": item?.instituteDetails?.role,
+                    "Area of Interest": item?.personalDetails?.areaofinterest,
+                    "Role of Faculty": item?.roles,
+                    "RC Book": item?.documents?.rcbook,
+                    "Driving License": item?.documents?.drivinglicense,
+                    "Bank Details": item?.documents?.bankdetails?.bankName,
+                    "Account No": item?.documents?.bankdetails?.accountNumber,
+                    "IFSC Code": item?.documents?.bankdetails?.ifsccode,
+                    "Baank Passbook": item?.documents?.passbook,
+                    Cheque: item?.documents?.cheque,
+                  };
+                  detailsData.push(obj);
+                });
+                console.log(detailsData);
+                xlsx.utils.json_to_sheet(detailsData, "Export.xlsx");
+                const ws = xlsx.utils.json_to_sheet(detailsData);
+                const wb = xlsx.utils.book_new();
+                xlsx.utils.book_append_sheet(wb, ws, "SheetJS");
+                xlsx.writeFile(wb, "Export.xlsx");
               }}
             >
               Export (Excel)

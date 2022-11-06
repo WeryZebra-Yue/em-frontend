@@ -31,6 +31,7 @@ th , td{
     border-radius: 6px;
     border: none;
     outline: none;
+    margin-right: 10px !important;
     /* background-color: red; */
     color: white;
     cursor: pointer;

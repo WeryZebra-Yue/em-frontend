@@ -7,10 +7,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import { Cookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
-import { addExaminer } from "../../Services/admin.service";
+import { addExaminer, getUniversities } from "../../Services/admin.service";
 
 function Add() {
   const history = useHistory();
+  const [Universities, setUniversity] = React.useState(null);
   const uploadImageCN = async (file) => {
     const URL = await uploadImage(file).then((res) => {
       // console.log(res);
@@ -19,12 +20,15 @@ function Add() {
     });
     return URL;
   };
-  useEffect(() => {
+  useEffect(async () => {
     const cookie = new Cookies();
     const token = cookie.get("token-ex");
     if (!token) {
       history.push("/");
     }
+    const res = await getUniversities();
+    setUniversity(res);
+    console.log(res);
   }, []);
   return (
     <div
@@ -191,47 +195,23 @@ function Add() {
               <div>
                 <div className={styles.component}>
                   <div className={styles.lable}>Institute Name</div>
-
-                  <select name="institute">
-                    <option
-                      className={styles.lable}
-                      value="P P Savani School of Engineering, Kosamba"
-                    >
-                      P P Savani School of Engineering, Kosamba
-                    </option>
-                    Chhotubhai Gopalbhai Patel Institute of Technology, Bardoli
-                    <option
-                      className={styles.lable}
-                      value="Chhotubhai Gopalbhai Patel Institute of Technology, Bardoli"
-                    >
-                      Chhotubhai Gopalbhai Patel Institute of Technology,
-                      Bardoli
-                    </option>
-                    <option
-                      className={styles.lable}
-                      value="Shree Swami Atmanand Saraswati Vidya Sankul, Surat"
-                    >
-                      Shree Swami Atmanand Saraswati Vidya Sankul, Surat
-                    </option>
-                    <option
-                      className={styles.lable}
-                      value="C K Pithawala College of Engineering and Technology,Surat"
-                    >
-                      C K Pithawala College of Engineering and Technology,Surat
-                    </option>
-                    <option
-                      className={styles.lable}
-                      value="Sarvajanic College of Engineering and Technology, Surat"
-                    >
-                      Sarvajanic College of Engineering and Technology, Surat
-                    </option>
-                    <option
-                      className={styles.lable}
-                      value="Sardar Vallabhbhai National Institute of Technology, Surat"
-                    >
-                      Sardar Vallabhbhai National Institute of Technology, Surat
-                    </option>
-                  </select>
+                  {Universities && (
+                    <select name="institute">
+                      <option
+                        className={styles.lable}
+                        value="P P Savani School of Engineering, Kosamba"
+                      >
+                        P P Savani School of Engineering, Kosamba
+                      </option>
+                      {Universities.map((item, index) => {
+                        return (
+                          <option className={styles.lable} value={item.name}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  )}
                 </div>
               </div>
               <div className={styles.component}>

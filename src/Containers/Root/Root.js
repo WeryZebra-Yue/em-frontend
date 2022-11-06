@@ -11,21 +11,112 @@ import paginationFactory, {
   PaginationProvider,
   PaginationListStandalone,
 } from "react-bootstrap-table2-paginator";
-// import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
+import * as xlsx from "xlsx";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { Cookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
-import { getAllExaminers, verifyToken } from "../../Services/admin.service";
+import {
+  addMultipleUsers,
+  getAllExaminers,
+  updateExaminer,
+  verifyToken,
+} from "../../Services/admin.service";
 import cellEditFactory from "react-bootstrap-table2-editor";
 function Root({ props }) {
   const { SearchBar } = Search;
   const history = useHistory();
   const [data, setData] = useState([]);
   const [permission, setPemission] = useState(["READ"]);
+  const [search, setSearch] = useState(true);
+  const fileInput = React.useRef(null);
   const WritePermission = () => {
     setPemission(["WRITE"]);
     console.log(permission);
+  };
+  const readUploadFile = (e) => {
+    const loading = toast.loading("Upload in progress");
+    e.preventDefault();
+    if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const res = e.target.result;
+        const workbook = xlsx.read(res, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const json = xlsx.utils.sheet_to_json(worksheet);
+        let newData = [...data];
+        console.log(json);
+        //     json.map((item) => {
+        //       console.log(item);
+        //       const res = {
+        //         e_id: item.Code,
+        //         personalDetails: {
+        //           name: item.Name,
+        //           phonenumber: item.Mobile,
+        //           collegeemail: item["Institute Mail"],
+        //           personalEmail: item["Personal Email"],
+        //         },
+        //         instituteDetails: {
+        //           institutename: item.Institute,
+        //           // distance: item.Distance,
+        //           role: item["Role of faculty"],
+        //         },
+        //         roles: [item["Category"]],
+        //         documents: {
+        //           bankDetails: {
+        //             ifscCode: item.IFSC,
+        //             bankName: item["Bank Name"],
+        //             accountNumber: item["Account No."],
+        //           },
+        //         },
+        //       };
+        //       // console.log(res);
+        //       newData.push(res);
+        //     });
+        //     let Length = newData.length;
+        //     console.log(Length);
+        //     for (let i = Length - json.length; i < Length; i++) {
+        //       newData[i].personalDetails.name = newData[i].personalDetails["name"]
+        //         .replace("Mr.", "")
+        //         .replace("Ms.", "")
+        //         .replace("Dr.", "");
+
+        //       console.log(newData[i]);
+        //       for (let j = 0; j < Length; j++) {
+        //         if (i != j) {
+        //           console.log(i);
+
+        //           if (
+        //             newData[i].personalDetails.collegeemail ===
+        //             newData[j]?.personalDetails.collegeemail
+        //           ) {
+        //             newData[j].roles = newData[j]?.roles.concat(newData[i].roles);
+        //             const update = await updateExaminer({
+        //               user: newData[j],
+        //             });
+        //             newData[i] = null;
+        //             console.log(i);
+        //             break;
+        //             // Length--;
+        //           }
+        //         }
+        //       }
+        //     }
+        //     let finalData = [];
+        //     for (let i = Length - json.length; i < Length; i++) {
+        //       if (newData[i] !== null) {
+        //         finalData.push(newData[i]);
+        //       }
+        //     }
+        //     addMultipleUsers(finalData).then((res) => {
+        //       console.log(res);
+        //       toast.dismiss(loading);
+        //       toast.success("Users Added Successfully");
+        //     });
+      };
+      reader.readAsArrayBuffer(e.target.files[0]);
+    }
   };
   useEffect(async () => {
     const cookie = new Cookies();
@@ -42,7 +133,7 @@ function Root({ props }) {
       const res = await getAllExaminers(token).then((res) => {
         toast.dismiss();
         setData(res);
-        // console.log(res);
+        console.log(res);
         toast.success("Data Loaded", {
           autoClose: 3000,
         });
@@ -54,6 +145,7 @@ function Root({ props }) {
     {
       dataField: "eid",
       text: "ID",
+      sort: true,
     },
     {
       dataField: "personalDetails.name",
@@ -76,6 +168,7 @@ function Root({ props }) {
       dataField: "personalDetails.collegeemail",
       text: "Institute Mail",
     },
+
     {
       dataField: "instituteDetails.role",
       text: "Role of faculty",
@@ -173,11 +266,18 @@ function Root({ props }) {
     firstPageText: "First",
     prePageText: "Back",
     nextPageText: "Next",
-    lastPageText: "Last",
+    lastPage: false,
     nextPageTitle: "First page",
     prePageTitle: "Pre page",
     firstPageTitle: "Next page",
     lastPageTitle: "Last page",
+    onPageChange: (page, sizePerPage) => {
+      console.log(page, sizePerPage);
+      setSearch(false);
+      setTimeout(() => {
+        setSearch(true);
+      }, 1000);
+    },
     showTotal: true,
     totalSize: data.length,
   };
@@ -186,7 +286,9 @@ function Root({ props }) {
     clickToSelect: true,
     clickToEdit: true,
   };
-
+  const afterSearch = (newResult) => {
+    console.log(newResult);
+  };
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <div
       style={{
@@ -196,21 +298,26 @@ function Root({ props }) {
         justifyContent: "center",
       }}
     >
-      <ToolkitProvider keyField="id" columns={columns} data={data} search>
+      <ToolkitProvider
+        keyField="eid"
+        columns={columns}
+        data={data}
+        search={{ afterSearch }}
+      >
         {(toolkitprops) => (
           <div
             style={{
               width: "90%",
             }}
           >
-            <SearchBar {...toolkitprops.searchProps} />
+            {<SearchBar {...toolkitprops.searchProps} keyField="eid" />}
+
             <BootstrapTable
-              keyField="id"
               bootstrap4
               striped
               hover
               bordered={true}
-              cellEdit={cellEditFactory({ mode: "dbclick" })}
+              keyField="eid"
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
@@ -251,20 +358,60 @@ function Root({ props }) {
             alignItems: "center",
           }}
         >
-          <button
-            className={styles.button + " " + styles.add}
-            variant="contained"
-            color="primary"
-            style={{
-              margin: "0px",
-              marginTop: "20px",
-            }}
-            onClick={() => {
-              history.push("/add");
-            }}
-          >
-            + New Examiner
-          </button>
+          <div>
+            <button
+              className={styles.button + " " + styles.add}
+              variant="contained"
+              color="primary"
+              style={{
+                margin: "0px",
+                marginTop: "20px",
+              }}
+              onClick={() => {
+                history.push("/add");
+              }}
+            >
+              + New Examiner
+            </button>
+            <input
+              type="file"
+              onChange={readUploadFile}
+              accept=".xlsx"
+              ref={fileInput}
+              hidden
+            />
+            <button
+              className={styles.button + " " + styles.add}
+              variant="contained"
+              color="primary"
+              style={{
+                margin: "0px",
+                marginTop: "20px",
+              }}
+              onClick={() => {
+                // history.push("/import");
+                // take input from user
+                fileInput.current.click();
+              }}
+            >
+              Import (Excel)
+            </button>
+            <button
+              className={styles.button + " " + styles.export}
+              variant="contained"
+              color="primary"
+              style={{
+                margin: "0px",
+                marginTop: "20px",
+              }}
+              onClick={() => {
+                xlsx.writeFile(data, "Examiner.xlsx");
+                // download excel
+              }}
+            >
+              Export (Excel)
+            </button>
+          </div>
           <button
             className={styles.button + " " + styles.delete}
             variant="contained"
@@ -338,7 +485,10 @@ function Root({ props }) {
         </tbody>
       </table> */}
 
-        <PaginationProvider pagination={paginationFactory(options)}>
+        <PaginationProvider
+          pagination={paginationFactory(options)}
+          keyField="eid"
+        >
           {contentTable}
         </PaginationProvider>
       </div>

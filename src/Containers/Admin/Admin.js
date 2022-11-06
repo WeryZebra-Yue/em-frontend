@@ -7,9 +7,11 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Header from "../../Components/Header/index";
 import {
   addAdmin,
+  addUniversity,
   AuthService,
   getAdmins,
   getPassword,
+  getUniversities,
   verifyToken,
 } from "../../Services/admin.service";
 import { useHistory } from "react-router-dom";
@@ -18,6 +20,7 @@ import logo from "../../Assets/General/Images/logo.png";
 import { useState } from "react";
 import ListItem from "../../Components/ListItem";
 import eye from "../../Assets/ListItem/Images/eye.svg";
+import ListUniversity from "../../Components/ListUniversity";
 
 const Admin = () => {
   // const toast = useToast();
@@ -29,6 +32,12 @@ const Admin = () => {
       passwordLength: 8,
       password: "",
       role: "WRITE",
+    },
+  ]);
+  const [University, setUniversity] = useState([
+    {
+      name: "P P Savani School of Engineering, Kosamba",
+      distance: 0,
     },
   ]);
   const history = useHistory();
@@ -47,6 +56,11 @@ const Admin = () => {
           console.log(res);
           if (Credentials.length === 1)
             setCredentials((Credentials) => [...Credentials, ...res]);
+        });
+        await getUniversities().then((res) => {
+          console.log(res);
+          if (University.length === 1)
+            setUniversity((University) => [...University, ...res]);
         });
       }
     }
@@ -188,6 +202,98 @@ const Admin = () => {
                 >
                   <img src={eye} alt="eye" />
                 </div>
+                <button className={styles.button + " " + styles.addNew}>
+                  {" "}
+                  + ADD{" "}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div className={styles.loginText}>LIST OF UNIVERSITY</div>
+        <div className={styles.formWrapper}>
+          <div>
+            {University &&
+              University.map((item, index) => {
+                return (
+                  <ListUniversity
+                    key={index}
+                    name={item.name}
+                    index={index}
+                    distance={item.distance}
+                    _id={item._id}
+                  />
+                );
+              })}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log(e.target.name.value);
+                console.log(e.target.distance.value);
+                setUniversity((University) => [
+                  ...University,
+                  {
+                    name: e.target.name.value,
+                    distance: e.target.distance.value,
+                  },
+                ]);
+                const obj = {
+                  name: e.target.name.value,
+                  distance: e.target.distance.value,
+                };
+                addUniversity(obj).then((res) => {
+                  if (res.status !== 400) {
+                    toast.success("University added successfully");
+                  } else {
+                    toast.error(res.message);
+                  }
+                });
+              }}
+
+              // console.log(e.target.role.value);
+              // // addAdmin({
+              //   email: e.target.user.value,
+              //   password: e.target.password.value,
+              //   role: e.target.role.value,
+              // }).then((res) => {
+              //   if (res.status !== 400) {
+              // setCredentials((Credentials) => [
+              //   ...Credentials,
+              //   {
+              //     email: e.target.user.value,
+              //     password: e.target.password.value,
+              //     role: e.target.role.value,
+              //   },
+              // ]);
+              // e.target.user.value = "";
+              // e.target.password.value = "";
+              // e.target.role.value = "READ";
+              // showPassword(false);
+              // toast.success("Admin added successfully");
+              // } else {
+              //   // toast.error(res.message);
+              // }
+              // });
+              // });
+            >
+              <div className={styles.component}>
+                <div className={styles.lable}>{University.length + 1}.</div>
+                <input
+                  required
+                  name="Name"
+                  className={styles.inputBox}
+                  type="text"
+                  id="name"
+                  placeholder="University Name"
+                />
+                <input
+                  type={"text"}
+                  className={styles.inputBox}
+                  id="distance"
+                  placeholder="Distance"
+                  required
+                />
+
                 <button className={styles.button + " " + styles.addNew}>
                   {" "}
                   + ADD{" "}

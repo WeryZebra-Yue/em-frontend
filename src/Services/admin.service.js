@@ -85,3 +85,40 @@ export const verifyToken = async (token) => {
     throw err;
   }
 };
+export const addMultipleUsers = async (users) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/addMultipleUsers", {
+      users: users,
+    });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const getUniversities = async () => {
+  try {
+    const { data } = await axios.get(ADMIN_URL + "/getUniversities");
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const addUniversity = async (university) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/addUniversity", university);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const updateUniversity = async (university) => {
+  try {
+    const { data } = await axios.post(
+      ADMIN_URL + "/updateUniversity",
+      university
+    );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

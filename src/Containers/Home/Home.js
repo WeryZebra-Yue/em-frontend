@@ -5,18 +5,25 @@ import styles from "./Home.module.css";
 import "react-toastify/dist/ReactToastify.css";
 import ReCAPTCHA from "react-google-recaptcha";
 import Header from "../../Components/Header/index";
-import { AuthService } from "../../Services/admin.service";
+import { AuthService, verifyToken } from "../../Services/admin.service";
 import { useHistory } from "react-router-dom";
 import { Cookies } from "react-cookie";
 const Home = () => {
   // const toast = useToast();
   const [Captacha, setCaptacha] = React.useState(false);
   const history = useHistory();
-  useEffect(() => {
+  useEffect(async () => {
     const cookie = new Cookies();
 
     if (cookie.get("token-ex")) {
       history.push("/dashboard");
+      const token = await verifyToken(cookie.get("token-ex"));
+      console.log(token);
+      if (token?.id) {
+        if (token.admin) {
+          history.push("/admin");
+        }
+      }
     }
   });
   return (

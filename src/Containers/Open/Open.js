@@ -8,13 +8,15 @@ import { useHistory } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import { useEffect } from "react";
 import ImagePopup from "../../Components/Popup";
+import { getUniversities } from "../../Services/admin.service";
 
 function Open() {
   const history = useHistory();
   const [data, setData] = React.useState(null);
   const [popupOpen, setPopupOpen] = React.useState(false);
   const [popupImage, setPopupImage] = React.useState(false);
-  useEffect(() => {
+  const [distance, setDistance] = React.useState(-1);
+  useEffect(async () => {
     const cookie = new Cookies();
     const token = cookie.get("token-ex");
     if (!token) {
@@ -23,6 +25,24 @@ function Open() {
     if (history.location.state?._id) {
       // console.log(history.location.state);
       setData(history.location.state);
+      const university = await getUniversities();
+
+      university.map((item) => {
+        if (
+          history.location.state.instituteDetails.institutename === item.name
+        ) {
+          console.log(item);
+          setDistance(item.distance);
+        }
+      });
+      if (distance === -1) {
+        if (
+          history.location.state.instituteDetails.institutename ===
+          "P P Savani School of Engineering, Kosamba"
+        ) {
+          setDistance(0);
+        }
+      }
     } else {
       // history.push("/dashboard");
     }
@@ -257,6 +277,38 @@ function Open() {
                     {data?.instituteDetails.institutename
                       ? data?.instituteDetails.institutename
                       : "Institute Name"}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className={styles.component} title="Click to Copy">
+                  <div className={styles.lable}>Distance</div>
+                  <div
+                    onClick={() => {
+                      // copy to clipboard
+                      navigator.clipboard.writeText(
+                        data?.instituteDetails.institutename
+                      );
+                      toast.success("Copied to clipboard");
+                    }}
+                    className={styles.inputBox}
+                    required
+                    name="InstituteName"
+                    type="text"
+                    placeholder="Institute Name"
+                    value={data?.instituteDetails.institutename}
+                    disabled={!data?.instituteDetails.institutename}
+                    style={{
+                      background: data?.instituteDetails.institutename
+                        ? "white"
+                        : "",
+                      color: data?.instituteDetails.institutename
+                        ? "black"
+                        : "rgb(84, 84, 84)",
+                    }}
+                  >
+                    {" "}
+                    {distance !== -1 ? distance : "N / A"}
                   </div>
                 </div>
               </div>

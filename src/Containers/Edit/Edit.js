@@ -8,14 +8,15 @@ import { useEffect } from "react";
 import { Cookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import ImagePopup from "../../Components/Popup/Popup";
-import { updateExaminer } from "../../Services/admin.service";
+import { getUniversities, updateExaminer } from "../../Services/admin.service";
 
 function Edit() {
   const history = useHistory();
   const [data, setData] = React.useState({});
   const [popupOpen, setPopupOpen] = React.useState(false);
   const [popupImage, setPopupImage] = React.useState(false);
-  useEffect(() => {
+  const [Universities, setUniversities] = React.useState(null);
+  useEffect(async () => {
     const cookie = new Cookies();
     const token = cookie.get("token-ex");
     if (!token) {
@@ -68,11 +69,13 @@ function Edit() {
       //   documents,
       //   roles,
       // });
-      // console.log(data);
       setData(history.location.state);
+      console.log(history.location.state);
     } else {
       history.push("/dashboard");
     }
+    const res = await getUniversities();
+    setUniversities(res);
   }, []);
   const uploadImageCN = async (file) => {
     const URL = await uploadImage(file).then((res) => {
@@ -289,54 +292,29 @@ function Edit() {
                     <div>
                       <div className={styles.component}>
                         <div className={styles.lable}>Institute Name</div>
-
-                        <select
-                          name="institute"
-                          defaultValue={data?.instituteDetails?.institutename}
-                        >
-                          <option
-                            className={styles.lable}
-                            value="P P Savani School of Engineering, Kosamba"
+                        {Universities && (
+                          <select
+                            name="institute"
+                            defaultValue={data?.instituteDetails?.institutename}
                           >
-                            P P Savani School of Engineering, Kosamba
-                          </option>
-                          Chhotubhai Gopalbhai Patel Institute of Technology,
-                          Bardoli
-                          <option
-                            className={styles.lable}
-                            value="Chhotubhai Gopalbhai Patel Institute of Technology, Bardoli"
-                          >
-                            Chhotubhai Gopalbhai Patel Institute of Technology,
-                            Bardoli
-                          </option>
-                          <option
-                            className={styles.lable}
-                            value="Shree Swami Atmanand Saraswati Vidya Sankul, Surat"
-                          >
-                            Shree Swami Atmanand Saraswati Vidya Sankul, Surat
-                          </option>
-                          <option
-                            className={styles.lable}
-                            value="C K Pithawala College of Engineering and Technology,Surat"
-                          >
-                            C K Pithawala College of Engineering and
-                            Technology,Surat
-                          </option>
-                          <option
-                            className={styles.lable}
-                            value="Sarvajanic College of Engineering and Technology, Surat"
-                          >
-                            Sarvajanic College of Engineering and Technology,
-                            Surat
-                          </option>
-                          <option
-                            className={styles.lable}
-                            value="Sardar Vallabhbhai National Institute of Technology, Surat"
-                          >
-                            Sardar Vallabhbhai National Institute of Technology,
-                            Surat
-                          </option>
-                        </select>
+                            <option
+                              className={styles.lable}
+                              value="P P Savani School of Engineering, Kosamba"
+                            >
+                              P P Savani School of Engineering, Kosamba
+                            </option>
+                            {Universities.map((item, index) => {
+                              return (
+                                <option
+                                  className={styles.lable}
+                                  value={item.name}
+                                >
+                                  {item.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
                       </div>
                     </div>
 

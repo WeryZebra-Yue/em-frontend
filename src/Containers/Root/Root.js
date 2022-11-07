@@ -12,7 +12,9 @@ import paginationFactory, {
   PaginationListStandalone,
 } from "react-bootstrap-table2-paginator";
 import * as xlsx from "xlsx";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import ToolkitProvider, {
+  ToolkitContext,
+} from "react-bootstrap-table2-toolkit";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { Cookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
@@ -28,7 +30,24 @@ function Root({ props }) {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [permission, setPemission] = useState(["READ"]);
-  const [search, setSearch] = useState(true);
+  const [search, setSearch] = useState(
+    `${
+      new URLSearchParams(window.location.href.split("?")[1]).get("search") ==
+      null
+        ? ""
+        : new URLSearchParams(window.location.href.split("?")[1]).get("search")
+    }`
+  );
+
+  const [defaultSearch, setDefaultSearch] = useState(
+    `${
+      new URLSearchParams(window.location.href.split("?")[1]).get("search") ==
+      null
+        ? ""
+        : new URLSearchParams(window.location.href.split("?")[1]).get("search")
+    }`
+  );
+
   const fileInput = React.useRef(null);
   const WritePermission = () => {
     setPemission(["WRITE"]);
@@ -126,6 +145,7 @@ function Root({ props }) {
       history.push("/");
     } else {
       toast.loading("Loading Data");
+
       const response = await verifyToken(token);
       if (response.role === "WRITE") {
         setPemission(["WRITE"]);
@@ -139,6 +159,8 @@ function Root({ props }) {
         });
       });
     }
+    // get params from url
+    // get params from url
   }, []);
 
   const columns = [
@@ -186,7 +208,18 @@ function Root({ props }) {
             {/* <Link to={{ pathname: "/edit", state: "button" }}>{"button"}</Link> */}
             <button
               onClick={() => {
-                history.push("/open", row);
+                history.push("/open", {
+                  row,
+                  link: `${
+                    new URLSearchParams(window.location.href.split("?")[1]).get(
+                      "search"
+                    ) == null
+                      ? ""
+                      : new URLSearchParams(
+                          window.location.href.split("?")[1]
+                        ).get("search")
+                  }`,
+                });
               }}
               className={styles.add + " " + styles.button}
             >
@@ -195,7 +228,19 @@ function Root({ props }) {
             {permission[0] === "WRITE" && (
               <button
                 onClick={() => {
-                  history.push("/edit", row);
+                  history.push("/edit", {
+                    row,
+
+                    link: `${
+                      new URLSearchParams(
+                        window.location.href.split("?")[1]
+                      ).get("search") == null
+                        ? ""
+                        : new URLSearchParams(
+                            window.location.href.split("?")[1]
+                          ).get("search")
+                    }`,
+                  });
                 }}
                 className={styles.add + " " + styles.button}
               >
@@ -273,10 +318,6 @@ function Root({ props }) {
     lastPageTitle: "Last page",
     onPageChange: (page, sizePerPage) => {
       console.log(page, sizePerPage);
-      setSearch(false);
-      setTimeout(() => {
-        setSearch(true);
-      }, 1000);
     },
     showTotal: true,
     totalSize: data.length,
@@ -286,8 +327,11 @@ function Root({ props }) {
     clickToSelect: true,
     clickToEdit: true,
   };
-  const afterSearch = (newResult) => {
-    console.log(newResult);
+  const afterSearch = () => {
+    setSearch(document.getElementById("search-bar-0").value);
+    history.push(
+      `/dashboard?search=${document.getElementById("search-bar-0").value}`
+    );
   };
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <div
@@ -302,7 +346,7 @@ function Root({ props }) {
         keyField="eid"
         columns={columns}
         data={data}
-        search={{ afterSearch }}
+        search={{ afterSearch, defaultSearch: defaultSearch }}
       >
         {(toolkitprops) => (
           <div
@@ -310,7 +354,17 @@ function Root({ props }) {
               width: "90%",
             }}
           >
-            {<SearchBar {...toolkitprops.searchProps} keyField="eid" />}
+            {
+              <SearchBar
+                searchProps={{
+                  onSearch: (e) => {
+                    console.log(e);
+                  },
+                }}
+                {...toolkitprops.searchProps}
+                keyField="eid"
+              />
+            }
 
             <BootstrapTable
               bootstrap4
@@ -324,6 +378,7 @@ function Root({ props }) {
           </div>
         )}
       </ToolkitProvider>
+
       <PaginationListStandalone {...paginationProps} />
     </div>
   );
@@ -368,7 +423,17 @@ function Root({ props }) {
                 marginTop: "20px",
               }}
               onClick={() => {
-                history.push("/add");
+                history.push("/add", {
+                  link: `${
+                    new URLSearchParams(window.location.href.split("?")[1]).get(
+                      "search"
+                    ) == null
+                      ? ""
+                      : new URLSearchParams(
+                          window.location.href.split("?")[1]
+                        ).get("search")
+                  }`,
+                });
               }}
             >
               + New Examiner

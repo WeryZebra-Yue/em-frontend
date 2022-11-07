@@ -22,14 +22,16 @@ function Open() {
     if (!token) {
       window.location.href = "/";
     }
-    if (history.location.state?._id) {
-      // console.log(history.location.state);
-      setData(history.location.state);
+    console.log(history.location.state.row);
+    if (history.location.state.row?._id) {
+      // console.log(history.location.state.row);
+      setData(history.location.state.row);
       const university = await getUniversities();
 
       university.map((item) => {
         if (
-          history.location.state.instituteDetails.institutename === item.name
+          history.location.state.row.instituteDetails.institutename ===
+          item.name
         ) {
           console.log(item);
           setDistance(item.distance);
@@ -37,7 +39,7 @@ function Open() {
       });
       if (distance === -1) {
         if (
-          history.location.state.instituteDetails.institutename ===
+          history.location.state.row.instituteDetails.institutename ===
           "P P Savani School of Engineering, Kosamba"
         ) {
           setDistance(0);

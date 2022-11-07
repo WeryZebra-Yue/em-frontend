@@ -29,6 +29,7 @@ function Add() {
     const res = await getUniversities();
     setUniversity(res);
     console.log(res);
+    console.log(history.location.state);
   }, []);
   return (
     <div
@@ -51,6 +52,7 @@ function Add() {
               className={styles.form}
               onSubmit={async (e) => {
                 e.preventDefault();
+
                 // console.log(e.target.elements);
                 const personalDetails = {
                   name: e.target.elements[1].value,
@@ -113,6 +115,10 @@ function Add() {
                 toast.dismiss(loading);
                 toast.success("Documents Uploaded");
                 // console.log(object);
+
+                history.push(
+                  `/dashboard?search=${history.location.state.link}`
+                );
               }}
             >
               {/* <div className={styles.component}>

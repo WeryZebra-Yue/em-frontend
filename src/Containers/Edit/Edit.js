@@ -22,9 +22,9 @@ function Edit() {
     if (!token) {
       window.location.href = "/";
     }
-    if (history.location.state?._id) {
-      // console.log(history.location.state);
-      // const temp = history.location.state;
+    if (history.location.state.row?._id) {
+      // console.log(history.location.state.row);
+      // const temp = history.location.state.row;
       // const personalDetails = {
       //   name: temp?.name ? temp?.name : "",
       //   phonenumber: temp?.phonenumber ? temp?.phonenumber : "",
@@ -69,8 +69,8 @@ function Edit() {
       //   documents,
       //   roles,
       // });
-      setData(history.location.state);
-      console.log(history.location.state);
+      setData(history.location.state.row);
+      console.log(history.location.state.row);
     } else {
       history.push("/dashboard");
     }
@@ -153,26 +153,26 @@ function Edit() {
                   //   e.target.elements[11].files,
                   //   e.target.elements[18]?.files
                   // );
-                  if (e.target.elements[11]?.files.length !== 0) {
+                  if (e.target.elements[11]?.files?.length !== 0) {
                     // console.log("rcbook");
                     rcBookURL = await uploadImageCN(
                       e.target.elements[11]?.files[0]
                     );
                   }
 
-                  if (e.target.elements[13]?.files.length !== 0) {
+                  if (e.target.elements[13]?.files?.length !== 0) {
                     drivingLicenesURL = await uploadImageCN(
                       e.target.elements[13]?.files[0]
                     );
                   }
 
-                  if (e.target.elements[18]?.files.length !== 0) {
+                  if (e.target.elements[18]?.files?.length !== 0) {
                     bankPassbookURL = await uploadImageCN(
                       e.target.elements[18]?.files[0]
                     );
                   }
 
-                  if (e.target.elements[20]?.files.length !== 0) {
+                  if (e.target.elements[20]?.files?.length !== 0) {
                     cancelledChequeURL = await uploadImageCN(
                       e.target.elements[20]?.files[0]
                     );
@@ -208,6 +208,10 @@ function Edit() {
                   // console.log(object);
 
                   toast.success("Documents Uploaded");
+                  console.log(history.location.state);
+                  history.push(
+                    `/dashboard?search=${history.location.state.link}`
+                  );
                 }}
               >
                 {/* <div className={styles.component}>

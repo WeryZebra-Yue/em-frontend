@@ -64,7 +64,7 @@ const Home = () => {
 
                   // console.log(response);
                   if (
-                    email === "admin@ppsu.db" ||
+                    email === "coe@ppsu.ac.in" ||
                     email === "developer@ppsu.db"
                   ) {
                     history.push("/admin");

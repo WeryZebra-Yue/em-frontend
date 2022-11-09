@@ -124,7 +124,7 @@ function Add() {
               {/* <div className={styles.component}>
                 <div className={styles.lable}>Institute Code</div>
                 <input
-                  required
+                  
                   name="InstituteCode"
                   type="text"
                   placeholder="Institute Code"
@@ -151,7 +151,6 @@ function Add() {
               <div className={styles.component}>
                 <div className={styles.lable}>Name</div>
                 <input
-                  required
                   name="Name"
                   className={styles.inputBox}
                   type="text"
@@ -162,7 +161,6 @@ function Add() {
                 <div className={styles.lable}>Contact Number</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="mobile"
                   type="text"
                   placeholder="Contact Number"
@@ -172,7 +170,6 @@ function Add() {
                 <div className={styles.lable}>Personal Email</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="PersonalEmail"
                   type="email"
                   placeholder="Personal Email"
@@ -182,17 +179,16 @@ function Add() {
                 <div className={styles.lable}>Institute Email</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="InstituteEmail"
                   type="email"
                   placeholder="Institute Email"
+                  required
                 />
               </div>
               <div className={styles.component}>
                 <div className={styles.lable}>Area of interest</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="areaOfInterest"
                   type="text"
                   placeholder="Area of interest"
@@ -352,7 +348,6 @@ function Add() {
                 <div className={styles.lable}>RC Book</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="rcBook"
                   type="file"
                   accept="image/*"
@@ -363,7 +358,6 @@ function Add() {
                 <div className={styles.lable}>Driving Licence</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="drivingLicenes"
                   type="file"
                   accept="image/*"
@@ -393,7 +387,6 @@ function Add() {
                 <div className={styles.lable}>Bank Name</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="bankName"
                   type="text"
                   placeholder="Bank Name"
@@ -403,7 +396,6 @@ function Add() {
                 <div className={styles.lable}>Account No.</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="accountNumber"
                   type="text"
                   placeholder="Account Number"
@@ -413,7 +405,6 @@ function Add() {
                 <div className={styles.lable}>IFSC Code</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="ifscCode"
                   type="text"
                   placeholder="IFSC Code"
@@ -423,7 +414,6 @@ function Add() {
                 <div className={styles.lable}>Bank passbook</div>
                 <input
                   className={styles.inputBox}
-                  required
                   name="bankPassbook"
                   accept="image/*"
                   type={"file"}
@@ -433,7 +423,6 @@ function Add() {
               <div className={styles.component}>
                 <div className={styles.lable}>Cancelled cheque</div>
                 <input
-                  required
                   className={styles.inputBox}
                   name="cancelledCheque"
                   type="file"
@@ -444,7 +433,6 @@ function Add() {
               <div className={styles.submitWrapper}>
                 <div>
                   <input
-                    required
                     className={styles.submit}
                     type={"submit"}
                     value={"Submit"}

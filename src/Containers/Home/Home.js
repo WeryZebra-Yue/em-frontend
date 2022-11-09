@@ -42,13 +42,13 @@ const Home = () => {
               onSubmit={async (e) => {
                 e.preventDefault();
 
-                if (!Captacha) {
-                  toast.error("Complete the captcha", {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                  });
-                  return;
-                }
+                // if (!Captacha) {
+                //   toast.error("Complete the captcha", {
+                //     position: "bottom-right",
+                //     autoClose: 5000,
+                //   });
+                //   return;
+                // }
                 const email = e.target.email.value;
                 const password = e.target.password.value;
                 const response = await AuthService(email, password);

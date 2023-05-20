@@ -23,7 +23,7 @@ font-family: 'Poppins', sans-serif;
     color: black;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-  
+
     margin: 20px;
   }
 .eye{
@@ -46,7 +46,7 @@ font-family: 'Poppins', sans-serif;
 }
 .dev:hover{
     background-color: none!important;
-    
+
 }
 .dev{
     background-color: transparent;
@@ -63,12 +63,12 @@ font-family: 'Poppins', sans-serif;
   }
 .lable{
     padding: 2px;
-    text-align: left  
+    text-align: left
     ;
     margin-right: 10px;
     font-family: 'Poppins', sans-serif;
     color: black;
-    
+
   }
 .inputBox{
   padding: 8px 10px 8px 10px;

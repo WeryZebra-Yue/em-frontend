@@ -53,12 +53,10 @@ const Admin = () => {
         return;
       } else {
         await getAdmins().then((res) => {
-          console.log(res);
           if (Credentials.length === 1)
             setCredentials((Credentials) => [...Credentials, ...res]);
         });
         await getUniversities().then((res) => {
-          console.log(res);
           if (University.length === 1)
             setUniversity((University) => [...University, ...res]);
         });
@@ -123,12 +121,10 @@ const Admin = () => {
                     role={item.role}
                     getPasswordForUser={async (email) => {
                       const password = await getPassword(email);
-                      console.log(password);
                       setCredentials((Credentials) => {
                         Credentials[index].password = password;
                         return [...Credentials];
                       });
-                      console.log(Credentials);
                     }}
                   />
                 );
@@ -136,9 +132,6 @@ const Admin = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log(e.target.user.value);
-                console.log(e.target.password.value);
-                console.log(e.target.role.value);
                 addAdmin({
                   email: e.target.user.value,
                   password: e.target.password.value,
@@ -228,8 +221,6 @@ const Admin = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log(e.target.name.value);
-                console.log(e.target.distance.value);
                 setUniversity((University) => [
                   ...University,
                   {
@@ -250,7 +241,6 @@ const Admin = () => {
                 });
               }}
 
-              // console.log(e.target.role.value);
               // // addAdmin({
               //   email: e.target.user.value,
               //   password: e.target.password.value,

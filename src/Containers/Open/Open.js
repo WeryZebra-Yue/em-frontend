@@ -22,9 +22,7 @@ function Open() {
     if (!token) {
       window.location.href = "/";
     }
-    console.log(history.location.state.row);
     if (history.location.state.row?._id) {
-      // console.log(history.location.state.row);
       setData(history.location.state.row);
       const university = await getUniversities();
 
@@ -33,7 +31,6 @@ function Open() {
           history.location.state.row.instituteDetails.institutename ===
           item.name
         ) {
-          console.log(item);
           setDistance(item.distance);
         }
       });
@@ -650,7 +647,7 @@ function Open() {
                     navigator.clipboard.writeText(data?.e_id);
                     toast.success("Copied to clipboard");
                   }}
-                  
+
                     required
                     className={styles.submit}
                     type={"submit"}
@@ -663,7 +660,6 @@ function Open() {
               open={popupOpen}
               link={popupImage}
               closePopup={() => {
-                // console.log("close");
                 setPopupOpen(false);
               }}
             />

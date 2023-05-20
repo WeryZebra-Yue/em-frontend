@@ -18,7 +18,6 @@ const Home = () => {
     if (cookie.get("token-ex")) {
       history.push("/dashboard");
       const token = await verifyToken(cookie.get("token-ex"));
-      console.log(token);
       if (token?.id) {
         if (token.admin) {
           history.push("/admin");
@@ -62,7 +61,6 @@ const Home = () => {
                     maxAge: 3600,
                   });
 
-                  // console.log(response);
                   if (
                     email === "coe@ppsu.ac.in" ||
                     email === "developer@ppsu.db"

@@ -51,7 +51,7 @@ font-family: 'Poppins', sans-serif;
   width: 150px;
   height: 150px;
   margin-bottom: 20px;
-  
+
 }
 .loginText{
   font-size: 1.5rem;
@@ -82,7 +82,7 @@ font-family: 'Poppins', sans-serif;
   width: 270px;
   font-size: 0.9rem;
   color: #8D8D8D;
-  padding: 1.5px 0px  1.5px 0px ; 
+  padding: 1.5px 0px  1.5px 0px ;
 
 }
 .captcha{
@@ -108,7 +108,7 @@ font-family: 'Poppins', sans-serif;
   margin:  20px 0px 20px 0px ;
 }
 .image img{
- 
+
   padding: 20px;
 }
 .redirect{
@@ -125,8 +125,8 @@ font-family: 'Poppins', sans-serif;
   color: black;
   cursor: pointer;
   text-align: left;
-  
- 
+
+
 
 }
 a{

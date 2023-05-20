@@ -7,6 +7,7 @@ import Header from "../../Components/Header";
 import logo from "../../Assets/General/Images/logo.png";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "../../global.css";
 import paginationFactory, {
   PaginationProvider,
   PaginationListStandalone,
@@ -21,6 +22,7 @@ import { useHistory } from "react-router-dom";
 import {
   addMultipleUsers,
   getAllExaminers,
+  getUniversities,
   updateExaminer,
   verifyToken,
 } from "../../Services/admin.service";
@@ -30,6 +32,8 @@ function Root({ props }) {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [permission, setPemission] = useState(["READ"]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [institutes, setInstitutes] = useState(null);
   const [search, setSearch] = useState(
     `${
       new URLSearchParams(window.location.href.split("?")[1]).get("search") ==
@@ -51,7 +55,6 @@ function Root({ props }) {
   const fileInput = React.useRef(null);
   const WritePermission = () => {
     setPemission(["WRITE"]);
-    console.log(permission);
   };
   const readUploadFile = (e) => {
     const loading = toast.loading("Upload in progress");
@@ -65,9 +68,7 @@ function Root({ props }) {
         const worksheet = workbook.Sheets[sheetName];
         const json = xlsx.utils.sheet_to_json(worksheet);
         let newData = [...data];
-        console.log(json);
         json.map((item) => {
-          console.log(item);
           const res = {
             e_id: item.Code,
             personalDetails: {
@@ -90,22 +91,17 @@ function Root({ props }) {
               },
             },
           };
-          // console.log(res);
           newData.push(res);
         });
         let Length = newData.length;
-        console.log(Length);
         for (let i = Length - json.length; i < Length; i++) {
           newData[i].personalDetails.name = newData[i].personalDetails["name"]
             .replace("Mr.", "")
             .replace("Ms.", "")
             .replace("Dr.", "");
 
-          console.log(newData[i]);
           for (let j = 0; j < Length; j++) {
             if (i != j) {
-              console.log(i);
-
               if (
                 newData[i].personalDetails.collegeemail ===
                 newData[j]?.personalDetails.collegeemail
@@ -115,7 +111,6 @@ function Root({ props }) {
                   user: newData[j],
                 });
                 newData[i] = null;
-                console.log(i);
                 break;
                 // Length--;
               }
@@ -129,7 +124,6 @@ function Root({ props }) {
           }
         }
         addMultipleUsers(finalData).then((res) => {
-          console.log(res);
           toast.dismiss(loading);
           toast.success("Users Added Successfully");
         });
@@ -153,14 +147,13 @@ function Root({ props }) {
       const res = await getAllExaminers(token).then((res) => {
         toast.dismiss();
         setData(res);
-        console.log(res);
         toast.success("Data Loaded", {
           autoClose: 3000,
         });
       });
+      const institute = await getUniversities();
+      setInstitutes(institute);
     }
-    // get params from url
-    // get params from url
   }, []);
 
   const columns = [
@@ -205,7 +198,6 @@ function Root({ props }) {
         };
         return (
           <div>
-            {/* <Link to={{ pathname: "/edit", state: "button" }}>{"button"}</Link> */}
             <button
               onClick={() => {
                 history.push("/open", {
@@ -304,6 +296,17 @@ function Root({ props }) {
     },
   ];
 
+  const getDistance = (institute) => {
+    let distance = 0;
+    institutes.forEach((item) => {
+      if (item.name === institute) {
+        distance = item.distance;
+        return distance;
+      }
+    });
+    return distance;
+  };
+
   const options = {
     custom: true,
     paginationSize: 4,
@@ -316,16 +319,21 @@ function Root({ props }) {
     prePageTitle: "Pre page",
     firstPageTitle: "Next page",
     lastPageTitle: "Last page",
-    onPageChange: (page, sizePerPage) => {
-      console.log(page, sizePerPage);
-    },
+    onPageChange: (page, sizePerPage) => {},
     showTotal: true,
     totalSize: data.length,
   };
   const selectRow = {
-    mode: "radio",
+    mode: "checkbox",
     clickToSelect: true,
-    clickToEdit: true,
+    style: { backgroundColor: "#c8e6c9" },
+    onSelect: (row, isSelect, rowIndex, e) => {
+      if (isSelect) {
+        setSelectedRows([...selectedRows, row]);
+      } else {
+        setSelectedRows(selectedRows.filter((item) => item.eid !== row.eid));
+      }
+    },
   };
   const afterSearch = () => {
     setSearch(document.getElementById("search-bar-0").value);
@@ -333,6 +341,7 @@ function Root({ props }) {
       `/dashboard?search=${document.getElementById("search-bar-0").value}`
     );
   };
+
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <div
       style={{
@@ -357,9 +366,7 @@ function Root({ props }) {
             {
               <SearchBar
                 searchProps={{
-                  onSearch: (e) => {
-                    console.log(e);
-                  },
+                  onSearch: (e) => {},
                 }}
                 {...toolkitprops.searchProps}
                 keyField="eid"
@@ -372,8 +379,9 @@ function Root({ props }) {
               hover
               bordered={true}
               keyField="eid"
-              {...toolkitprops.baseProps}
               {...paginationTableProps}
+              {...toolkitprops.baseProps}
+              selectRow={selectRow}
             />
           </div>
         )}
@@ -393,18 +401,7 @@ function Root({ props }) {
             <img src={logo} />
           </div>
         </div>
-        {/* <button
-        className={styles.button + " " + styles.select}
-        onClick={() => {
-          // select all
-          selection.forEach((item) => {
-            item.checked = true;
-            // console.log(item);
-          });
-        }}
-      >
-        Select All
-      </button> */}
+
         <div
           style={{
             display: "flex",
@@ -471,99 +468,60 @@ function Root({ props }) {
               }}
               onClick={() => {
                 let detailsData = [];
-                data.forEach((item) => {
-                  //   dataField: "personalDetails.name",
-                  //   text: "Name",
-                  // },
-                  // {
-                  //   dataField: "personalDetails.phonenumber",
-                  //   text: "Mobile",
-                  // },
-                  // {
-                  //   dataField: "instituteDetails.institutename",
-                  //   text: "Institute",
-                  // },
-                  // {
-                  //   dataField: "personalDetails.personalEmail",
-                  //   text: "Personal Email",
-                  // },
-                  // {
-                  //   dataField: "personalDetails.collegeemail",
-                  //   text: "Institute Mail",
-                  // },
-                  // {
-                  //   dataField: "instituteDetails.role",
-                  //   text: "Role of faculty",
-                  // },
-                  // {
-                  //   dataField: "personalDetails.areaofinterest",
-                  //   text: "areaofinterest",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "roles",
-                  //   text: "category",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.rcbook",
-                  //   text: "rcbook",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.drivinglicense",
-                  //   text: "drivinglicense",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.bankdetails.bankName",
-                  //   text: "bankdetails",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.bankdetails.accountNumber",
-                  //   text: "accountno",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.bankdetails.ifsccode",
-                  //   text: "ifsccode",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.passbook",
-                  //   text: "bankpassbook",
-                  //   hidden: true,
-                  // },
-                  // {
-                  //   dataField: "documents.cheque",
-                  //   text: "cheque",
-                  //   hidden: true,
-                  // },
+                let datas = [];
+                if (selectedRows.length > 0) datas = selectedRows;
+                else datas = data;
+                datas.forEach((item, index) => {
+                  let distnace = getDistance(
+                    item?.instituteDetails?.institutename
+                  );
                   let obj = {
-                    Name: item?.personalDetails?.name,
-                    Mobile: item?.personalDetails?.phonenumber,
+                    "Sr. No.": index + 1,
+                    Class: " ",
+                    "Course Code": " ",
+                    "External Faculty Name": item?.personalDetails?.name,
+                    "External Faculty's Contact No.":
+                      item?.personalDetails?.phonenumber,
                     Institute: item?.instituteDetails?.institutename,
-                    "Personal Email": item?.personalDetails?.personalEmail,
-                    "Institute Mail": item?.personalDetails?.collegeemail,
-                    "Role of faculty": item?.instituteDetails?.role,
-                    "Area of Interest": item?.personalDetails?.areaofinterest,
-                    "Role of Faculty": item?.roles,
-                    "RC Book": item?.documents?.rcbook,
-                    "Driving License": item?.documents?.drivinglicense,
-                    "Bank Details": item?.documents?.bankdetails?.bankName,
-                    "Account No": item?.documents?.bankdetails?.accountNumber,
-                    "IFSC Code": item?.documents?.bankdetails?.ifsccode,
-                    "Baank Passbook": item?.documents?.passbook,
-                    Cheque: item?.documents?.cheque,
+                    TA: distnace * 30,
+                    DA: 200,
+                    TOTAL: distnace * 30 + 200,
+                    "External Faculty's Sign.": " ",
                   };
                   detailsData.push(obj);
                 });
-                console.log(detailsData);
                 xlsx.utils.json_to_sheet(detailsData, "Export.xlsx");
                 const ws = xlsx.utils.json_to_sheet(detailsData);
                 const wb = xlsx.utils.book_new();
                 xlsx.utils.book_append_sheet(wb, ws, "SheetJS");
+                // style rows
+                wb.Sheets["SheetJS"]["!cols"] = [{ wch: 15 }];
+                wb.Sheets["SheetJS"]["!rows"] = [{ hpt: 30 }];
+                // style cells
+                wb.Sheets["SheetJS"]["A1"].s = {
+                  font: {
+                    sz: 14,
+                    bold: true,
+                  },
+                  alignment: {
+                    horizontal: "center",
+                    vertical: "center",
+                  },
+                };
+                wb.Sheets["SheetJS"]["A1"].s.fill = {
+                  fgColor: { rgb: "FFFFAA00" },
+                };
+                wb.Sheets["SheetJS"]["A1"].s.border = {
+                  top: { style: "thin", color: { rgb: "FF000000" } },
+                  bottom: { style: "thin", color: { rgb: "FF000000" } },
+                  left: { style: "thin", color: { rgb: "FF000000" } },
+                  right: { style: "thin", color: { rgb: "FF000000" } },
+                };
+                wb.Sheets["SheetJS"]["A1"].s.alignment = {
+                  horizontal: "center",
+                  vertical: "center",
+                  wrapText: true,
+                };
                 xlsx.writeFile(wb, "Export.xlsx");
               }}
             >
@@ -588,60 +546,6 @@ function Root({ props }) {
           </button>
         </div>
         <br />
-        {/* add a search bar */}
-        {/* <input
-        className={styles.search}
-        type="text"
-        placeholder="Search"
-        onChange={(e) => {
-          // console.log(e.target.value);
-        }}
-      /> */}
-        {/* <table>
-        <thead>
-          <tr>
-            {fields.map((field, index) => (
-              <th key={index}>{field}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  style={{
-                    width: "100%",
-                    cursor: "pointer",
-                  }}
-                  ref={(input) => {
-                    if (input) {
-                      selection[index] = input;
-                    }
-                  }}
-                  id={row.id}
-                  variant="filled"
-                  type="checkbox"
-                />
-              </td>
-              <td>{row.id}</td>
-              <td>{row.name}</td>
-              <td>{row.mobile}</td>
-              <td>{row.institute}</td>
-              <td>{row.personalEmail}</td>
-              <td>{row.instituteMail}</td>
-              <td>{row.role}</td>
-              <td>
-                <Link to="/edit">
-                  <button className={styles.button + " " + styles.select}>
-                    Edit
-                  </button>
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
 
         <PaginationProvider
           pagination={paginationFactory(options)}

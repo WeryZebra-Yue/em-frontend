@@ -21,10 +21,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-   
+
     padding: 20px;
     border-radius: 10px;
-   
+
 }
 #popup-2 {
    background: none!important;
@@ -48,7 +48,7 @@
     outline: none;
     background-color: #2568FB;
     color: white;
-    
+
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
 

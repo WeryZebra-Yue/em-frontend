@@ -23,7 +23,6 @@ function Edit() {
       window.location.href = "/";
     }
     if (history.location.state.row?._id) {
-      // console.log(history.location.state.row);
       // const temp = history.location.state.row;
       // const personalDetails = {
       //   name: temp?.name ? temp?.name : "",
@@ -55,7 +54,6 @@ function Edit() {
       // };
 
       // const roles = temp?.roles ? temp?.roles : [];
-      // console.log({
       //   e_id: temp.eid,
       //   personalDetails,
       //   instituteDetails,
@@ -70,7 +68,6 @@ function Edit() {
       //   roles,
       // });
       setData(history.location.state.row);
-      console.log(history.location.state.row);
     } else {
       history.push("/dashboard");
     }
@@ -79,8 +76,6 @@ function Edit() {
   }, []);
   const uploadImageCN = async (file) => {
     const URL = await uploadImage(file).then((res) => {
-      // console.log(res);
-      // console.log(res[0]);
       return res[0];
     });
     return URL;
@@ -108,7 +103,6 @@ function Edit() {
                 className={styles.form}
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  // console.log(e.target.elements);
                   const personalDetails = {
                     name: e.target.elements[1].value,
                     phonenumber: e.target.elements[2].value,
@@ -143,18 +137,15 @@ function Edit() {
                   // let cancelledCheque = e.target.elements[20]?.files
                   //   ? e.target.elements[20]?.files[0]
                   //   : false;
-                  // console.log(e.target);
                   let rcBookURL = data?.documents?.rcbook;
                   let drivingLicenesURL = data?.documents?.drivinglicenes;
                   let bankPassbookURL = data?.documents?.passbook;
                   let cancelledChequeURL = data?.documents?.cheque;
                   let loading = toast.loading("Uploading Documents");
-                  // console.log(
                   //   e.target.elements[11].files,
                   //   e.target.elements[18]?.files
                   // );
                   if (e.target.elements[11]?.files?.length !== 0) {
-                    // console.log("rcbook");
                     rcBookURL = await uploadImageCN(
                       e.target.elements[11]?.files[0]
                     );
@@ -205,10 +196,8 @@ function Edit() {
                     user: object,
                   });
                   toast.dismiss(loading);
-                  // console.log(object);
 
                   toast.success("Documents Uploaded");
-                  console.log(history.location.state);
                   history.push(
                     `/dashboard?search=${history.location.state.link}`
                   );
@@ -217,7 +206,7 @@ function Edit() {
                 {/* <div className={styles.component}>
                 <div className={styles.lable}>Institute Code</div>
                 <input
-                  
+
                   name="InstituteCode"
                   type="text"
                   placeholder="Institute Code"
@@ -329,9 +318,7 @@ function Edit() {
                         name="category"
                         // default value
                         defaultValue={data?.instituteDetails?.role}
-                        onChange={(e) => {
-                          // console.log(e);
-                        }}
+                        onChange={(e) => {}}
                       >
                         <option className={styles.lable} value="NA">
                           NA
@@ -645,7 +632,6 @@ function Edit() {
               open={popupOpen}
               link={popupImage}
               closePopup={() => {
-                // console.log("close");
                 setPopupOpen(false);
               }}
             />

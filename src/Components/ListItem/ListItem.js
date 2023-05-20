@@ -41,9 +41,7 @@ function ListItem({
           };
 
           if (object.password !== data.password || object.role !== data.role) {
-            console.log(data);
             updateAdmin(data).then((res) => {
-              console.log(res);
               toast.success("Updated Successfully");
             });
           } else {

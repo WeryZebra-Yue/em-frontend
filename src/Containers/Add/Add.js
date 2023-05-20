@@ -14,8 +14,6 @@ function Add() {
   const [Universities, setUniversity] = React.useState(null);
   const uploadImageCN = async (file) => {
     const URL = await uploadImage(file).then((res) => {
-      // console.log(res);
-      // console.log(res[0]);
       return res[0];
     });
     return URL;
@@ -28,8 +26,6 @@ function Add() {
     }
     const res = await getUniversities();
     setUniversity(res);
-    console.log(res);
-    console.log(history.location.state);
   }, []);
   return (
     <div
@@ -53,7 +49,6 @@ function Add() {
               onSubmit={async (e) => {
                 e.preventDefault();
 
-                // console.log(e.target.elements);
                 const personalDetails = {
                   name: e.target.elements[1].value,
                   phonenumber: e.target.elements[2].value,
@@ -81,13 +76,11 @@ function Add() {
                 let bankPassbook = e.target.elements[16].files[0];
                 let cancelledCheque = e.target.elements[17].files[0];
                 let loading = toast.loading("Uploading Documents");
-                // console.log(rcBook);
                 let rcBookURL = await uploadImageCN(rcBook);
                 let drivingLicenesURL = await uploadImageCN(drivingLicenes);
                 let bankPassbookURL = await uploadImageCN(bankPassbook);
                 let cancelledChequeURL = await uploadImageCN(cancelledCheque);
 
-                // console.log(rcBookURL);
                 const documents = {
                   rcbook: rcBookURL,
                   drivinglicenes: drivingLicenesURL,
@@ -114,7 +107,6 @@ function Add() {
                 const uploading = await addExaminer({ user: object });
                 toast.dismiss(loading);
                 toast.success("Documents Uploaded");
-                // console.log(object);
 
                 history.push(
                   `/dashboard?search=${history.location.state.link}`
@@ -124,7 +116,7 @@ function Add() {
               {/* <div className={styles.component}>
                 <div className={styles.lable}>Institute Code</div>
                 <input
-                  
+
                   name="InstituteCode"
                   type="text"
                   placeholder="Institute Code"

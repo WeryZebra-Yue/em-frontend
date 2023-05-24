@@ -483,6 +483,7 @@ function Root({ props }) {
                     "External Faculty's Contact No.":
                       item?.personalDetails?.phonenumber,
                     Institute: item?.instituteDetails?.institutename,
+                    Distance: distnace,
                     TA: distnace * 30,
                     DA: 200,
                     TOTAL: distnace * 30 + 200,

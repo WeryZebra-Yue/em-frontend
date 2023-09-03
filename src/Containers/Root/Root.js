@@ -30,10 +30,11 @@ import cellEditFactory from "react-bootstrap-table2-editor";
 function Root({ props }) {
   const { SearchBar } = Search;
   const history = useHistory();
+  const fileInput = React.useRef(null);
   const [data, setData] = useState([]);
   const [permission, setPemission] = useState(["READ"]);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [institutes, setInstitutes] = useState(null);
+  const [institutes, setInstitutes] = useState([]);
   const [search, setSearch] = useState(
     `${
       new URLSearchParams(window.location.href.split("?")[1]).get("search") ==
@@ -42,7 +43,6 @@ function Root({ props }) {
         : new URLSearchParams(window.location.href.split("?")[1]).get("search")
     }`
   );
-
   const [defaultSearch, setDefaultSearch] = useState(
     `${
       new URLSearchParams(window.location.href.split("?")[1]).get("search") ==
@@ -51,11 +51,236 @@ function Root({ props }) {
         : new URLSearchParams(window.location.href.split("?")[1]).get("search")
     }`
   );
+  useEffect(async () => {
+    const cookie = new Cookies();
 
-  const fileInput = React.useRef(null);
-  const WritePermission = () => {
-    setPemission(["WRITE"]);
+    const token = cookie.get("token-ex");
+    if (!token) {
+      history.push("/");
+    } else {
+      toast.loading("Loading Data");
+
+      const response = await verifyToken(token);
+      if (response.role === "WRITE") {
+        setPemission(["WRITE"]);
+      }
+      const res = await getAllExaminers(token).then((res) => {
+        toast.dismiss();
+        setData(res);
+        toast.success("Data Loaded", {
+          autoClose: 3000,
+        });
+      });
+      const institute = await getUniversities();
+      console.log(institute);
+      setInstitutes(institute);
+    }
+  }, []);
+
+  const columns = [
+    {
+      dataField: "eid",
+      text: "ID",
+      sort: true,
+    },
+    {
+      dataField: "personalDetails.name",
+      text: "Name",
+    },
+    {
+      dataField: "personalDetails.phonenumber",
+      text: "Mobile",
+    },
+
+    {
+      dataField: "instituteDetails.institutename",
+      text: "Institute",
+    },
+    {
+      dataField: "personalDetails.personalEmail",
+      text: "Personal Email",
+    },
+    {
+      dataField: "personalDetails.collegeemail",
+      text: "Institute Mail",
+    },
+
+    {
+      dataField: "instituteDetails.role",
+      text: "Role of faculty",
+    },
+    {
+      dataField: "action",
+      text: "Action",
+      formatter: (cell, row) => {
+        const toPathwithProps = {
+          pathname: "/edit",
+          state: "hello",
+        };
+        return (
+          <div>
+            <button
+              onClick={() => {
+                history.push("/open", {
+                  row,
+                  link: `${
+                    new URLSearchParams(window.location.href.split("?")[1]).get(
+                      "search"
+                    ) == null
+                      ? ""
+                      : new URLSearchParams(
+                          window.location.href.split("?")[1]
+                        ).get("search")
+                  }`,
+                });
+              }}
+              className={styles.add + " " + styles.button}
+            >
+              Open
+            </button>
+            {permission[0] === "WRITE" && (
+              <button
+                onClick={() => {
+                  getParams([row])
+                  // window.open(
+                  //   "ta-da.html",
+                  //   "_blank" // <- This is what makes it open in a new window.
+                  // );
+                }}
+                className={styles.add + " " + styles.button}
+              >
+                Get TA+DA Form
+              </button>
+            )}
+            <button
+              onClick={() => {
+                history.push("/edit", {
+                  row,
+
+                  link: `${
+                    new URLSearchParams(window.location.href.split("?")[1]).get(
+                      "search"
+                    ) == null
+                      ? ""
+                      : new URLSearchParams(
+                          window.location.href.split("?")[1]
+                        ).get("search")
+                  }`,
+                });
+              }}
+              className={styles.add + " " + styles.button}
+            >
+              Edit
+            </button>
+          </div>
+        );
+      },
+    },
+    {
+      dataField: "_id",
+      text: "id",
+      hidden: true,
+    },
+    {
+      dataField: "personalDetails.areaofinterest",
+      text: "areaofinterest",
+      hidden: true,
+    },
+    {
+      dataField: "roles",
+      text: "category",
+      hidden: true,
+    },
+
+    {
+      dataField: "documents.rcbook",
+      text: "rcbook",
+      hidden: true,
+    },
+    {
+      dataField: "documents.drivinglicense",
+      text: "drivinglicense",
+      hidden: true,
+    },
+    {
+      dataField: "documents.bankdetails.bankName",
+      text: "bankdetails",
+      hidden: true,
+    },
+    {
+      dataField: "documents.bankdetails.accountNumber",
+      text: "accountno",
+      hidden: true,
+    },
+    {
+      dataField: "documents.bankdetails.ifsccode",
+      text: "ifsccode",
+      hidden: true,
+    },
+    {
+      dataField: "documents.passbook",
+      text: "bankpassbook",
+      hidden: true,
+    },
+    {
+      dataField: "documents.cheque",
+      text: "cheque",
+      hidden: true,
+    },
+  ];
+
+  const getDistance = (institute) => {
+    let distance = 0;
+    console.log(institutes);
+    institutes.forEach((item) => {
+      if (item.name === institute) {
+        distance = item.distance;
+        return distance;
+      }
+    });
+    return distance;
   };
+  const getParams = async (data) =>{
+    const insitutes = await getUniversities();
+    let distance = 0;
+    toast.loading("Loading Data");
+    insitutes.forEach((item) => {
+      if (item.name === data[0]?.instituteDetails?.institutename) {
+        distance = item.distance;
+        return distance;
+      }
+    });
+
+    const params  = {
+      school: data[0].e_id === "SOE" ? "School of Engineering" : "SON" ? "School of Nursing" : "SOP" ? "School of Physiotherapy" : "SLM" ? "School of Management" : "",
+      institute: data[0]?.instituteDetails?.institutename? data[0]?.instituteDetails?.institutename : "",
+      course: "",
+      examiner: data[0]?.personalDetails?.name? data[0]?.personalDetails?.name : "",
+      contact: data[0]?.personalDetails?.phonenumber? data[0]?.personalDetails?.phonenumber : "",
+      email: data[0]?.personalDetails?.collegeemail? data[0]?.personalDetails?.collegeemail : "",
+      degree: "",
+      semester: "",
+      code: "",
+      date: new Date().toLocaleDateString(),
+      travelled : data[0]?.instituteDetails?.institutename ? data[0]?.instituteDetails?.institutename : "",
+      city: "",
+      bank: data[0]?.documents?.bankDetails?.bankName ? data[0]?.documents?.bankDetails?.bankName : "",
+      branch: "",
+      account: data[0]?.documents?.bankDetails?.accountNumber ? data[0]?.documents?.bankDetails?.accountNumber : "",
+      ifsc: data[0]?.documents?.bankDetails?.ifscCode ? data[0]?.documents?.bankDetails?.ifscCode : "",
+      kilometres: distance,
+      ta : `${100*distance}`,
+      da : 200,
+      total : `${100*distance + 200}`
+
+    }
+    const reve = "/ta-da.html?" + new URLSearchParams(params).toString();
+    console.log(reve);
+    window.open(
+      reve,
+      "_blank" // <- This is what makes it open in a new window.
+    );
+}
   const readUploadFile = (e) => {
     const loading = toast.loading("Upload in progress");
     e.preventDefault();
@@ -131,182 +356,6 @@ function Root({ props }) {
       reader.readAsArrayBuffer(e.target.files[0]);
     }
   };
-  useEffect(async () => {
-    const cookie = new Cookies();
-
-    const token = cookie.get("token-ex");
-    if (!token) {
-      history.push("/");
-    } else {
-      toast.loading("Loading Data");
-
-      const response = await verifyToken(token);
-      if (response.role === "WRITE") {
-        setPemission(["WRITE"]);
-      }
-      const res = await getAllExaminers(token).then((res) => {
-        toast.dismiss();
-        setData(res);
-        toast.success("Data Loaded", {
-          autoClose: 3000,
-        });
-      });
-      const institute = await getUniversities();
-      setInstitutes(institute);
-    }
-  }, []);
-
-  const columns = [
-    {
-      dataField: "eid",
-      text: "ID",
-      sort: true,
-    },
-    {
-      dataField: "personalDetails.name",
-      text: "Name",
-    },
-    {
-      dataField: "personalDetails.phonenumber",
-      text: "Mobile",
-    },
-
-    {
-      dataField: "instituteDetails.institutename",
-      text: "Institute",
-    },
-    {
-      dataField: "personalDetails.personalEmail",
-      text: "Personal Email",
-    },
-    {
-      dataField: "personalDetails.collegeemail",
-      text: "Institute Mail",
-    },
-
-    {
-      dataField: "instituteDetails.role",
-      text: "Role of faculty",
-    },
-    {
-      dataField: "action",
-      text: "Action",
-      formatter: (cell, row) => {
-        const toPathwithProps = {
-          pathname: "/edit",
-          state: "hello",
-        };
-        return (
-          <div>
-            <button
-              onClick={() => {
-                history.push("/open", {
-                  row,
-                  link: `${
-                    new URLSearchParams(window.location.href.split("?")[1]).get(
-                      "search"
-                    ) == null
-                      ? ""
-                      : new URLSearchParams(
-                          window.location.href.split("?")[1]
-                        ).get("search")
-                  }`,
-                });
-              }}
-              className={styles.add + " " + styles.button}
-            >
-              Open
-            </button>
-            {permission[0] === "WRITE" && (
-              <button
-                onClick={() => {
-                  history.push("/edit", {
-                    row,
-
-                    link: `${
-                      new URLSearchParams(
-                        window.location.href.split("?")[1]
-                      ).get("search") == null
-                        ? ""
-                        : new URLSearchParams(
-                            window.location.href.split("?")[1]
-                          ).get("search")
-                    }`,
-                  });
-                }}
-                className={styles.add + " " + styles.button}
-              >
-                Edit
-              </button>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      dataField: "_id",
-      text: "id",
-      hidden: true,
-    },
-    {
-      dataField: "personalDetails.areaofinterest",
-      text: "areaofinterest",
-      hidden: true,
-    },
-    {
-      dataField: "roles",
-      text: "category",
-      hidden: true,
-    },
-
-    {
-      dataField: "documents.rcbook",
-      text: "rcbook",
-      hidden: true,
-    },
-    {
-      dataField: "documents.drivinglicense",
-      text: "drivinglicense",
-      hidden: true,
-    },
-    {
-      dataField: "documents.bankdetails.bankName",
-      text: "bankdetails",
-      hidden: true,
-    },
-    {
-      dataField: "documents.bankdetails.accountNumber",
-      text: "accountno",
-      hidden: true,
-    },
-    {
-      dataField: "documents.bankdetails.ifsccode",
-      text: "ifsccode",
-      hidden: true,
-    },
-    {
-      dataField: "documents.passbook",
-      text: "bankpassbook",
-      hidden: true,
-    },
-    {
-      dataField: "documents.cheque",
-      text: "cheque",
-      hidden: true,
-    },
-  ];
-
-  const getDistance = (institute) => {
-    let distance = 0;
-    institutes.forEach((item) => {
-      if (item.name === institute) {
-        distance = item.distance;
-        return distance;
-      }
-    });
-    return distance;
-  };
-
   const options = {
     custom: true,
     paginationSize: 4,
@@ -341,7 +390,9 @@ function Root({ props }) {
       `/dashboard?search=${document.getElementById("search-bar-0").value}`
     );
   };
-
+  const WritePermission = () => {
+    setPemission(["WRITE"]);
+  };
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <div
       style={{

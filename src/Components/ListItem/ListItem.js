@@ -75,6 +75,8 @@ function ListItem({
               background: email === "developer@ppsu.db" ? "" : "white",
               margin: "10px",
               marginBottom: "20px",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
             }}
             // value={}
             disabled={email === "developer@ppsu.db" ? true : false}

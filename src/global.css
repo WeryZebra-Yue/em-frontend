@@ -1,3 +1,6 @@
 .react-bootstrap-table th[data-row-selection] {
   width: 40px !important;
 }
+* {
+  font-family: "Poppins", sans-serif !important;
+}

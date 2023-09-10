@@ -20,6 +20,15 @@ import { Search } from "react-bootstrap-table2-toolkit";
 import { Cookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Button,
+  TextField,
+} from "@mui/material";
+import {
   addMultipleUsers,
   getAllExaminers,
   getUniversities,
@@ -35,6 +44,10 @@ function Root({ props }) {
   const [permission, setPemission] = useState(["READ"]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [institutes, setInstitutes] = useState([]);
+  const [params, setParams] = useState([{}]);
+  const [missingParams, setMissingParams] = useState([]);
+  let [isOpen, setIsOpen] = useState(false);
+
   const [search, setSearch] = useState(
     `${
       new URLSearchParams(window.location.href.split("?")[1]).get("search") ==
@@ -76,7 +89,137 @@ function Root({ props }) {
       setInstitutes(institute);
     }
   }, []);
-
+  //   school:
+  //   data[0].e_id === "SOE"
+  //     ? "School of Engineering"
+  //     : "SON"
+  //     ? "School of Nursing"
+  //     : "SOP"
+  //     ? "School of Physiotherapy"
+  //     : "SLM"
+  //     ? "School of Management"
+  //     : "",
+  // institute: data[0]?.instituteDetails?.institutename
+  //   ? data[0]?.instituteDetails?.institutename
+  //   : "",
+  // course: "",
+  // examiner: data[0]?.personalDetails?.name
+  //   ? data[0]?.personalDetails?.name
+  //   : "",
+  // contact: data[0]?.personalDetails?.phonenumber
+  //   ? data[0]?.personalDetails?.phonenumber
+  //   : "",
+  // email: data[0]?.personalDetails?.collegeemail
+  //   ? data[0]?.personalDetails?.collegeemail
+  //   : "",
+  // degree: "",
+  // semester: "",
+  // code: "",
+  // date: new Date().toLocaleDateString(),
+  // travelled: data[0]?.instituteDetails?.institutename
+  //   ? data[0]?.instituteDetails?.institutename
+  //   : "",
+  // city: "",
+  // bank: data[0]?.documents?.bankDetails?.bankName
+  //   ? data[0]?.documents?.bankDetails?.bankName
+  //   : "",
+  // branch: "",
+  // account: data[0]?.documents?.bankDetails?.accountNumber
+  //   ? data[0]?.documents?.bankDetails?.accountNumber
+  //   : "",
+  // ifsc: data[0]?.documents?.bankDetails?.ifscCode
+  //   ? data[0]?.documents?.bankDetails?.ifscCode
+  //   : "",
+  // kilometres: distance,
+  // ta: `${100 * distance}`,
+  // da: 200,
+  // total: `${100 * distance + 200}`,
+  const names = [
+    {
+      key: "school",
+      name: "School",
+    },
+    {
+      key: "institute",
+      name: "Institute",
+    },
+    {
+      key: "course",
+      name: "Course",
+    },
+    {
+      key: "examiner",
+      name: "Examiner",
+    },
+    {
+      key: "contact",
+      name: "Contact",
+    },
+    {
+      key: "email",
+      name: "Email",
+    },
+    {
+      key: "degree",
+      name: "Degree",
+    },
+    {
+      key: "semester",
+      name: "Semester",
+    },
+    {
+      key: "code",
+      name: "Code",
+    },
+    {
+      key: "date",
+      name: "Date",
+    },
+    {
+      key: "travelled",
+      name: "Travelled",
+    },
+    {
+      key: "city",
+      name: "City",
+    },
+    {
+      key: "mode",
+      name: "Mode of Travel",
+    },
+    {
+      key: "bank",
+      name: "Bank",
+    },
+    {
+      key: "branch",
+      name: "Branch",
+    },
+    {
+      key: "account",
+      name: "Account",
+    },
+    {
+      key: "ifsc",
+      name: "IFSC",
+    },
+    {
+      key: "kilometres",
+      name: "Kilometres",
+    },
+    {
+      key: "ta",
+      name: "TA",
+    },
+    {
+      key: "da",
+      name: "DA",
+    },
+    {
+      key: "total",
+      name: "Total",
+    },
+  ];
   const columns = [
     {
       dataField: "eid",
@@ -141,7 +284,8 @@ function Root({ props }) {
             {permission[0] === "WRITE" && (
               <button
                 onClick={() => {
-                  getParams([row])
+                  // toast.loading("Loading Data");
+                  getParams([row]);
                   // window.open(
                   //   "ta-da.html",
                   //   "_blank" // <- This is what makes it open in a new window.
@@ -149,7 +293,7 @@ function Root({ props }) {
                 }}
                 className={styles.add + " " + styles.button}
               >
-                Get TA+DA Form
+                Get Form
               </button>
             )}
             <button
@@ -240,10 +384,9 @@ function Root({ props }) {
     });
     return distance;
   };
-  const getParams = async (data) =>{
+  const getParams = async (data) => {
     const insitutes = await getUniversities();
     let distance = 0;
-    toast.loading("Loading Data");
     insitutes.forEach((item) => {
       if (item.name === data[0]?.instituteDetails?.institutename) {
         distance = item.distance;
@@ -251,36 +394,80 @@ function Root({ props }) {
       }
     });
 
-    const params  = {
-      school: data[0].e_id === "SOE" ? "School of Engineering" : "SON" ? "School of Nursing" : "SOP" ? "School of Physiotherapy" : "SLM" ? "School of Management" : "",
-      institute: data[0]?.instituteDetails?.institutename? data[0]?.instituteDetails?.institutename : "",
+    const params = {
+      school:
+        data[0].e_id === "SOE"
+          ? "School of Engineering"
+          : "SON"
+          ? "School of Nursing"
+          : "SOP"
+          ? "School of Physiotherapy"
+          : "SLM"
+          ? "School of Management"
+          : "",
+      institute: data[0]?.instituteDetails?.institutename
+        ? data[0]?.instituteDetails?.institutename
+        : "",
       course: "",
-      examiner: data[0]?.personalDetails?.name? data[0]?.personalDetails?.name : "",
-      contact: data[0]?.personalDetails?.phonenumber? data[0]?.personalDetails?.phonenumber : "",
-      email: data[0]?.personalDetails?.collegeemail? data[0]?.personalDetails?.collegeemail : "",
+      examiner: data[0]?.personalDetails?.name
+        ? data[0]?.personalDetails?.name
+        : "",
+      contact: data[0]?.personalDetails?.phonenumber
+        ? data[0]?.personalDetails?.phonenumber
+        : "",
+      email: data[0]?.personalDetails?.collegeemail
+        ? data[0]?.personalDetails?.collegeemail
+        : "",
       degree: "",
       semester: "",
       code: "",
+      mode: "",
       date: new Date().toLocaleDateString(),
-      travelled : data[0]?.instituteDetails?.institutename ? data[0]?.instituteDetails?.institutename : "",
+      travelled: data[0]?.instituteDetails?.institutename
+        ? data[0]?.instituteDetails?.institutename
+        : "",
       city: "",
-      bank: data[0]?.documents?.bankDetails?.bankName ? data[0]?.documents?.bankDetails?.bankName : "",
+      bank: data[0]?.documents?.bankDetails?.bankName
+        ? data[0]?.documents?.bankDetails?.bankName
+        : "",
       branch: "",
-      account: data[0]?.documents?.bankDetails?.accountNumber ? data[0]?.documents?.bankDetails?.accountNumber : "",
-      ifsc: data[0]?.documents?.bankDetails?.ifscCode ? data[0]?.documents?.bankDetails?.ifscCode : "",
+      account: data[0]?.documents?.bankDetails?.accountNumber
+        ? data[0]?.documents?.bankDetails?.accountNumber
+        : "",
+      ifsc: data[0]?.documents?.bankDetails?.ifscCode
+        ? data[0]?.documents?.bankDetails?.ifscCode
+        : "",
       kilometres: distance,
-      ta : `${100*distance}`,
-      da : 200,
-      total : `${100*distance + 200}`
-
+      ta: `${100 * distance}`,
+      da: 200,
+      total: `${100 * distance + 200}`,
+    };
+    const missingParams = [];
+    for (let key in params) {
+      if (params[key] === "") {
+        console.log(key);
+        missingParams.push({
+          name: names.filter((item) => item.key === key)[0].name,
+          value: key,
+          val: params[key],
+        });
+      }
+    }
+    console.log(missingParams);
+    if (missingParams.length > 0) {
+      setMissingParams(missingParams);
+      setParams(params);
+      setIsOpen(true);
+      return;
     }
     const reve = "/ta-da.html?" + new URLSearchParams(params).toString();
     console.log(reve);
+    toast.dismiss();
     window.open(
       reve,
       "_blank" // <- This is what makes it open in a new window.
     );
-}
+  };
   const readUploadFile = (e) => {
     const loading = toast.loading("Upload in progress");
     e.preventDefault();
@@ -444,8 +631,12 @@ function Root({ props }) {
   return (
     <div>
       <Header />
-
-      <ToastContainer position="bottom-right" />
+      <ToastContainer
+        position="bottom-right"
+        style={{
+          fontFamily: "Poppins",
+        }}
+      />
       <div className={styles.mainWrapper}>
         <div className={styles.Header}>
           <div>
@@ -529,10 +720,17 @@ function Root({ props }) {
                   let obj = {
                     "Sr. No.": index + 1,
                     Class: " ",
-                    "Course Code": " ",
+                    "Institute Code": item?.e_id,
                     "External Faculty Name": item?.personalDetails?.name,
                     "External Faculty's Contact No.":
                       item?.personalDetails?.phonenumber,
+                    "College Email ID": item?.personalDetails?.collegeemail,
+                    "Personal Email ID": item?.personalDetails?.personalEmail,
+                    "Bank Name": item?.documents?.bankDetails?.bankName,
+                    "Bank Account No.":
+                      item?.documents?.bankDetails?.accountNumber,
+                    "IFSC Code": item?.documents?.bankDetails?.ifscCode,
+                    "Role of Faculty": item?.instituteDetails?.role,
                     Institute: item?.instituteDetails?.institutename,
                     Distance: distnace,
                     TA: distnace * 30,
@@ -606,6 +804,121 @@ function Root({ props }) {
           {contentTable}
         </PaginationProvider>
       </div>
+      <Dialog
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        size="lg"
+      >
+        <DialogTitle
+          style={{
+            fontFamily: "Poppins",
+          }}
+        >
+          Fill the missing details
+        </DialogTitle>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log(params);
+            const reve =
+              "/ta-da.html?" + new URLSearchParams(params).toString();
+            console.log(reve);
+            toast.dismiss();
+            window.open(
+              reve,
+              "_blank" // <- This is what makes it open in a new window.
+            );
+            setIsOpen(false);
+          }}
+        >
+          <DialogContent
+            style={{
+              fontFamily: "Poppins",
+            }}
+          >
+            <div>
+              {missingParams.map((item, index) => (
+                <div
+                  style={{
+                    marginBottom: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    maxWidth: "400px",
+                    width: "70vw",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "10px",
+                      paddingLeft: "0px",
+                    }}
+                  >
+                    <b>{item.name}</b>
+                  </div>
+
+                  <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    style={{
+                      fontFamily: "Poppins",
+                    }}
+                    inputProps={{
+                      id: item.value,
+                      onChange: (e) => {
+                        setParams({
+                          ...params,
+                          [item.value]: e.target.value,
+                        });
+                      },
+                    }}
+                    required
+                  />
+                </div>
+              ))}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setIsOpen(false);
+              }}
+              style={{
+                textTransform: "capitalize",
+                fontFamily: "Poppins",
+                cursor: "pointer",
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="outlined"
+              style={{
+                textTransform: "capitalize",
+                fontFamily: "Poppins",
+                cursor: "pointer",
+              }}
+              // onClick={(e) => {
+              //   e.preventDefault();
+              //   console.log(e.target);
+              //   // const reve =
+              //   //   "/ta-da.html?" + new URLSearchParams(params).toString();
+              //   // console.log(reve);
+              //   // toast.dismiss();
+              //   // window.open(
+              //   //   reve,
+              //   //   "_blank" // <- This is what makes it open in a new window.
+              //   // );
+              //   // setIsOpen(false);
+              // }}
+            >
+              Download
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </div>
   );
 }

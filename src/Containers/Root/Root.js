@@ -169,7 +169,7 @@ function Root({ props }) {
     },
     {
       key: "code",
-      name: "Code",
+      name: "Subject Code",
     },
     {
       key: "date",
@@ -293,7 +293,7 @@ function Root({ props }) {
                 }}
                 className={styles.add + " " + styles.button}
               >
-                Get Form
+                Form
               </button>
             )}
             <button
@@ -427,15 +427,15 @@ function Root({ props }) {
         ? data[0]?.instituteDetails?.institutename
         : "",
       city: "",
-      bank: data[0]?.documents?.bankDetails?.bankName
-        ? data[0]?.documents?.bankDetails?.bankName
+      bank: data[0]?.documents?.bankdetails?.bankName
+        ? data[0]?.documents?.bankdetails?.bankName
         : "",
       branch: "",
-      account: data[0]?.documents?.bankDetails?.accountNumber
-        ? data[0]?.documents?.bankDetails?.accountNumber
+      account: data[0]?.documents?.bankdetails?.accountNumber
+        ? data[0]?.documents?.bankdetails?.accountNumber
         : "",
-      ifsc: data[0]?.documents?.bankDetails?.ifscCode
-        ? data[0]?.documents?.bankDetails?.ifscCode
+      ifsc: data[0]?.documents?.bankdetails?.ifscCode
+        ? data[0]?.documents?.bankdetails?.ifscCode
         : "",
       kilometres: distance,
       ta: `${100 * distance}`,
@@ -491,7 +491,6 @@ function Root({ props }) {
             },
             instituteDetails: {
               institutename: item.Institute,
-              // distance: item.Distance,
               role: item["Role of faculty"],
             },
             roles: [item["Category"]],
@@ -693,8 +692,6 @@ function Root({ props }) {
                 marginTop: "20px",
               }}
               onClick={() => {
-                // history.push("/import");
-                // take input from user
                 fileInput.current.click();
               }}
             >

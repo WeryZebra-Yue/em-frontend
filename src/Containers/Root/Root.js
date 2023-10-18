@@ -264,22 +264,39 @@ function Root({ props }) {
           <div>
             <button
               onClick={() => {
-                history.push("/open", {
-                  row,
-                  link: `${
-                    new URLSearchParams(window.location.href.split("?")[1]).get(
-                      "search"
-                    ) == null
-                      ? ""
-                      : new URLSearchParams(
-                          window.location.href.split("?")[1]
-                        ).get("search")
-                  }`,
-                });
+                {
+                  permission[0] !== "WRITE"
+                    ? history.push("/edit", {
+                        row,
+
+                        link: `${
+                          new URLSearchParams(
+                            window.location.href.split("?")[1]
+                          ).get("search") == null
+                            ? ""
+                            : new URLSearchParams(
+                                window.location.href.split("?")[1]
+                              ).get("search")
+                        }`,
+                      })
+                    : history.push("/open", {
+                        row,
+                        link: `${
+                          new URLSearchParams(
+                            window.location.href.split("?")[1]
+                          ).get("search") == null
+                            ? ""
+                            : new URLSearchParams(
+                                window.location.href.split("?")[1]
+                              ).get("search")
+                        }`,
+                      });
+                }
               }}
               className={styles.add + " " + styles.button}
             >
-              Open
+              {/* Open  */}
+              {permission[0] !== "WRITE" ? "Edit" : "View"}
             </button>
             {permission[0] === "WRITE" && (
               <button
@@ -296,7 +313,7 @@ function Root({ props }) {
                 Form
               </button>
             )}
-            <button
+            {/* <button
               onClick={() => {
                 history.push("/edit", {
                   row,
@@ -315,7 +332,7 @@ function Root({ props }) {
               className={styles.add + " " + styles.button}
             >
               Edit
-            </button>
+            </button> */}
           </div>
         );
       },
@@ -499,6 +516,7 @@ function Root({ props }) {
                 ifscCode: item.IFSC,
                 bankName: item["Bank Name"],
                 accountNumber: item["Account No."],
+                branch: item.Branch,
               },
             },
           };
@@ -506,10 +524,7 @@ function Root({ props }) {
         });
         let Length = newData.length;
         for (let i = Length - json.length; i < Length; i++) {
-          newData[i].personalDetails.name = newData[i].personalDetails["name"]
-            .replace("Mr.", "")
-            .replace("Ms.", "")
-            .replace("Dr.", "");
+          newData[i].personalDetails.name = newData[i].personalDetails["name"];
 
           for (let j = 0; j < Length; j++) {
             if (i != j) {
@@ -534,9 +549,16 @@ function Root({ props }) {
             finalData.push(newData[i]);
           }
         }
+        if (finalData.length === 0) {
+          toast.dismiss(loading);
+          toast.error("Institute Email already exists");
+          return;
+        }
         addMultipleUsers(finalData).then((res) => {
           toast.dismiss(loading);
           toast.success("Users Added Successfully");
+          toast.warning("Please refresh the page to see the changes");
+          setData([...data, ...finalData]);
         });
       };
       reader.readAsArrayBuffer(e.target.files[0]);
@@ -659,6 +681,7 @@ function Root({ props }) {
               style={{
                 margin: "0px",
                 marginTop: "20px",
+                background: "#3f51b5",
               }}
               onClick={() => {
                 history.push("/add", {
@@ -690,10 +713,12 @@ function Root({ props }) {
               style={{
                 margin: "0px",
                 marginTop: "20px",
+                background: data.length === 0 ? "#ccc" : "#3f51b5",
               }}
               onClick={() => {
                 fileInput.current.click();
               }}
+              disabled={data.length === 0}
             >
               Import (Excel)
             </button>
@@ -704,6 +729,7 @@ function Root({ props }) {
               style={{
                 margin: "0px",
                 marginTop: "20px",
+                background: data.length === 0 ? "#ccc" : "#3f51b5",
               }}
               onClick={() => {
                 let detailsData = [];
@@ -727,6 +753,7 @@ function Root({ props }) {
                     "Bank Account No.":
                       item?.documents?.bankDetails?.accountNumber,
                     "IFSC Code": item?.documents?.bankDetails?.ifscCode,
+                    Branch: item?.documents?.bankDetails?.branch,
                     "Role of Faculty": item?.instituteDetails?.role,
                     Institute: item?.instituteDetails?.institutename,
                     Distance: distnace,
@@ -782,6 +809,8 @@ function Root({ props }) {
             style={{
               margin: "0px",
               marginTop: "20px",
+              // background: sign out red color
+              background: "#B23B3B",
             }}
             onClick={() => {
               const cookie = new Cookies();

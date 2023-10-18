@@ -214,8 +214,15 @@ function Open() {
                 </div>
               </div>
               <div className={styles.component} title="Click to Copy">
-                <div className={styles.lable}>Area of interest</div>
                 <div
+                  className={styles.lable}
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  Area of interest
+                </div>
+                {/* <div
                   onClick={() => {
                     // copy to clipboard
                     navigator.clipboard.writeText(
@@ -243,6 +250,38 @@ function Open() {
                   {data?.personalDetails.areaofinterest
                     ? data?.personalDetails.areaofinterest
                     : "Area of interest"}
+                </div> */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    fontFamily: "Poppins",
+                    width: "100%",
+                    gap: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className={styles.component}
+                >
+                  {data?.personalDetails.areaofinterest &&
+                    data?.personalDetails.areaofinterest.map((item) => {
+                      return (
+                        <div
+                          style={{
+                            width: "90%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "white",
+                            borderRadius: "5px",
+                            padding: "5px",
+                          }}
+                        >
+                          {item}
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div>

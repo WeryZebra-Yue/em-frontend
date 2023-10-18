@@ -1,56 +1,54 @@
-.popupimage{
-    width: 100% ;
+.popupimage {
+  width: 100%;
 }
-.downloadbutton{
-    width: max-content;
-    padding: 5px 19px 5px 19px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    background-color: #2568FB;
-    color: white;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+.downloadbutton {
+  width: max-content;
+  padding: 5px 19px 5px 19px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background-color: #062b7b;
+  color: white;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
 
-    margin: 10px;
-
+  margin: 10px;
 }
-.popupWrapper{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.popupWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    padding: 20px;
-    border-radius: 10px;
-
+  padding: 20px;
+  border-radius: 10px;
 }
 #popup-2 {
-   background: none!important;
+  background: none !important;
 }
-.download{
-    display: flex;
-    justify-content: flex-end;
+.download {
+  display: flex;
+  justify-content: flex-end;
 }
-.close{
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    align-items: flex-end;
+.close {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: flex-end;
 }
-.close button{
-    width: max-content;
-    padding: 5px 19px 5px 19px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    background-color: #2568FB;
-    color: white;
+.close button {
+  width: max-content;
+  padding: 5px 19px 5px 19px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background-color: #062b7b;
+  color: white;
 
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
 
-    margin: 10px;
+  margin: 10px;
 }

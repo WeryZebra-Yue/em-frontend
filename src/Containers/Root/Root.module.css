@@ -19,7 +19,7 @@ th , td{
   background-color: rgb(20, 106, 144);
 }
 .add {
-  background-color: #2568fb;
+  background-color: #062b7b;
 }
 .export {
   background-color: green;
@@ -193,7 +193,7 @@ a {
   border-radius: 6px;
   border: none;
   outline: none;
-  background-color: #2568fb;
+  background-color: #062b7b;
   color: white;
   cursor: pointer;
   font-family: "Poppins", sans-serif;

@@ -16,6 +16,7 @@ function Edit() {
   const [popupOpen, setPopupOpen] = React.useState(false);
   const [popupImage, setPopupImage] = React.useState(false);
   const [Universities, setUniversities] = React.useState(null);
+  const [areaOfInterest, setAreaOfInterest] = React.useState([]);
   useEffect(async () => {
     const cookie = new Cookies();
     const token = cookie.get("token-ex");
@@ -68,6 +69,12 @@ function Edit() {
       //   roles,
       // });
       setData(history.location.state.row);
+      console.log(history.location.state.row);
+      if (history.location.state.row?.personalDetails?.areaofinterest) {
+        setAreaOfInterest(
+          history.location.state.row?.personalDetails?.areaofinterest
+        );
+      }
     } else {
       history.push("/dashboard");
     }
@@ -108,64 +115,65 @@ function Edit() {
                     phonenumber: e.target.elements[2].value,
                     personalEmail: e.target.elements[3].value,
                     collegeemail: e.target.elements[4].value,
-                    areaofinterest: e.target.elements[5].value,
+                    areaofinterest: areaOfInterest,
                   };
+                  const lengtt = areaOfInterest.length + 1;
                   const instituteDetails = {
-                    institutename: e.target.elements[6].value,
-                    role: e.target.elements[7].value,
+                    institutename: e.target.elements[lengtt + 6].value,
+                    role: e.target.elements[lengtt + 7].value,
                   };
                   let roles = [];
-                  if (e.target.elements[8].checked) {
+                  if (e.target.elements[lengtt + 8].checked) {
                     roles.push("Examiner");
                   }
-                  if (e.target.elements[9].checked) {
+                  if (e.target.elements[lengtt + 9].checked) {
                     roles.push("Paper Setter");
                   }
-                  if (e.target.elements[10].checked) {
+                  if (e.target.elements[lengtt + 10].checked) {
                     roles.push("Expert");
                   }
 
-                  // let rcBook = e.target.elements[11]?.files
-                  //   ? e.target.elements[11]?.files[0]
+                  // let rcBook = e.target.elements[lengtt+ 11]?.files
+                  //   ? e.target.elements[lengtt+ 11]?.files[0]
                   //   : false;
-                  // let drivingLicenes = e.target.elements[13]?.files
-                  //   ? e.target.elements[13]?.files[0]
+                  // let drivingLicenes = e.target.elements[lengtt+ 13]?.files
+                  //   ? e.target.elements[lengtt+ 13]?.files[0]
                   //   : false;
-                  // let bankPassbook = e.target.elements[18]?.files
-                  //   ? e.target.elements[18]?.files[0]
+                  // let bankPassbook = e.target.elements[lengtt+ 18]?.files
+                  //   ? e.target.elements[lengtt+ 18]?.files[0]
                   //   : false;
-                  // let cancelledCheque = e.target.elements[20]?.files
-                  //   ? e.target.elements[20]?.files[0]
+                  // let cancelledCheque = e.target.elements[lengtt+ 20]?.files
+                  //   ? e.target.elements[lengtt+ 20]?.files[0]
                   //   : false;
                   let rcBookURL = data?.documents?.rcbook;
                   let drivingLicenesURL = data?.documents?.drivinglicenes;
                   let bankPassbookURL = data?.documents?.passbook;
                   let cancelledChequeURL = data?.documents?.cheque;
                   let loading = toast.loading("Uploading Documents");
-                  //   e.target.elements[11].files,
-                  //   e.target.elements[18]?.files
+                  //   e.target.elements[lengtt+ 11].files,
+                  //   e.target.elements[lengtt+ 18]?.files
                   // );
-                  if (e.target.elements[11]?.files?.length !== 0) {
+                  if (e.target.elements[lengtt + 11]?.files?.length !== 0) {
                     rcBookURL = await uploadImageCN(
-                      e.target.elements[11]?.files[0]
+                      e.target.elements[lengtt + 11]?.files[0]
                     );
                   }
 
-                  if (e.target.elements[13]?.files?.length !== 0) {
+                  if (e.target.elements[lengtt + 13]?.files?.length !== 0) {
                     drivingLicenesURL = await uploadImageCN(
-                      e.target.elements[13]?.files[0]
+                      e.target.elements[lengtt + 13]?.files[0]
                     );
                   }
 
-                  if (e.target.elements[18]?.files?.length !== 0) {
+                  if (e.target.elements[lengtt + 19]?.files?.length !== 0) {
                     bankPassbookURL = await uploadImageCN(
-                      e.target.elements[18]?.files[0]
+                      e.target.elements[lengtt + 19]?.files[0]
                     );
                   }
 
-                  if (e.target.elements[20]?.files?.length !== 0) {
+                  if (e.target.elements[lengtt + 21]?.files?.length !== 0) {
                     cancelledChequeURL = await uploadImageCN(
-                      e.target.elements[20]?.files[0]
+                      e.target.elements[lengtt + 21]?.files[0]
                     );
                   }
 
@@ -175,14 +183,15 @@ function Edit() {
                     passbook: bankPassbookURL,
                     cheque: cancelledChequeURL,
                     bankdetails: {
-                      bankName: e.target.elements[15].value,
-                      accountNumber: e.target.elements[16].value,
-                      ifscCode: e.target.elements[17].value,
+                      bankName: e.target.elements[lengtt + 15].value,
+                      accountNumber: e.target.elements[lengtt + 16].value,
+                      ifscCode: e.target.elements[lengtt + 18].value,
+                      branch: e.target.elements[lengtt + 17].value,
                     },
                   };
                   // const roles = ["Examiner", "Paper Setter", "Expert"];
                   // const roles = {
-                  //   role: e.target.elements[7].value,
+                  //   role: e.target.elements[lengtt+ 7].value,
                   // };
                   const object = {
                     id: data._id,
@@ -270,15 +279,70 @@ function Edit() {
                     defaultValue={data?.personalDetails?.collegeemail}
                   />
                 </div>
-                <div className={styles.component}>
-                  <div className={styles.lable}>Area of interest</div>
-                  <input
-                    className={styles.inputBox}
-                    name="areaOfInterest"
-                    type="text"
-                    placeholder="Area of interest"
-                    defaultValue={data?.personalDetails?.areaofinterest}
-                  />
+                <div
+                  className={styles.component}
+                  style={{
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div
+                    className={styles.lable}
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    Area of interest
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    {/* <input
+                      className={styles.inputBox}
+                      name="areaOfInterest"
+                      type="text"
+                      placeholder="Area of interest"
+                      defaultValue={data?.personalDetails?.areaofinterest}
+                    /> */}
+
+                    {areaOfInterest.map((item) => {
+                      return (
+                        <input
+                          className={styles.inputBox}
+                          name="areaOfInterest"
+                          type="text"
+                          placeholder="Area of interest"
+                          defaultValue={item}
+                        />
+                      );
+                    })}
+                    <input
+                      className={styles.inputBox}
+                      name="areaOfInterest"
+                      type="text"
+                      placeholder="Area of interest"
+                    />
+                    <button
+                      className={styles.button + " " + styles.add}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const temp = areaOfInterest;
+                        temp.push(e.target.previousSibling.value);
+                        console.log(temp);
+                        setAreaOfInterest([...temp]);
+                        e.target.previousSibling.value = "";
+                      }}
+                    >
+                      Add
+                    </button>
+                  </div>
                 </div>
                 {data?.instituteDetails && (
                   <div>
@@ -469,7 +533,7 @@ function Edit() {
                   </div>
                 </div>
                 <div className={styles.component}>
-                  <div className={styles.lable}>RC Book</div>
+                  <div className={styles.lable}>RC Book (PNG or JPEG)</div>
 
                   <input
                     className={styles.inputBox}
@@ -494,7 +558,9 @@ function Edit() {
                   </button>
                 </div>
                 <div className={styles.component}>
-                  <div className={styles.lable}>Driving Licence</div>
+                  <div className={styles.lable}>
+                    Driving Licence (PNG or JPEG)
+                  </div>
 
                   <input
                     className={styles.inputBox}
@@ -560,6 +626,16 @@ function Edit() {
                   />
                 </div>
                 <div className={styles.component}>
+                  <div className={styles.lable}>Branch</div>
+                  <input
+                    className={styles.inputBox}
+                    name="branch"
+                    type="text"
+                    placeholder="Bank Branch"
+                    defaultValue={data?.documents?.bankdetails?.branch}
+                  />
+                </div>
+                <div className={styles.component}>
                   <div className={styles.lable}>IFSC Code</div>
                   <input
                     className={styles.inputBox}
@@ -570,7 +646,9 @@ function Edit() {
                   />
                 </div>
                 <div className={styles.component}>
-                  <div className={styles.lable}>Bank passbook</div>
+                  <div className={styles.lable}>
+                    Bank passbook (PNG or JPEG)
+                  </div>
                   <input
                     className={styles.inputBox}
                     name="bankPassbook"
@@ -594,7 +672,9 @@ function Edit() {
                   </button>
                 </div>
                 <div className={styles.component}>
-                  <div className={styles.lable}>Cancelled cheque</div>
+                  <div className={styles.lable}>
+                    Cancelled cheque (PNG or JPEG)
+                  </div>
                   <input
                     className={styles.inputBox}
                     name="cancelledCheque"

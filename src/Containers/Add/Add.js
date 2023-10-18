@@ -179,12 +179,12 @@ function Add() {
               </div>
               <div className={styles.component}>
                 <div className={styles.lable}>Area of interest</div>
-                <input
+                {/* <input
                   className={styles.inputBox}
                   name="areaOfInterest"
                   type="text"
                   placeholder="Area of interest"
-                />
+                /> */}
               </div>
               <div>
                 <div className={styles.component}>
@@ -337,7 +337,8 @@ function Add() {
                 </div>
               </div>
               <div className={styles.component}>
-                <div className={styles.lable}>RC Book</div>
+                <div className={styles.lable}>RC Book (PNG or JPEG)</div>
+
                 <input
                   className={styles.inputBox}
                   name="rcBook"
@@ -347,7 +348,9 @@ function Add() {
                 />
               </div>
               <div className={styles.component}>
-                <div className={styles.lable}>Driving Licence</div>
+                <div className={styles.lable}>
+                  Driving Licence (PNG or JPEG)
+                </div>
                 <input
                   className={styles.inputBox}
                   name="drivingLicenes"
@@ -403,7 +406,16 @@ function Add() {
                 />
               </div>
               <div className={styles.component}>
-                <div className={styles.lable}>Bank passbook</div>
+                <div className={styles.lable}>Branch</div>
+                <input
+                  className={styles.inputBox}
+                  name="branch"
+                  type="text"
+                  placeholder="Bank Branch"
+                />
+              </div>
+              <div className={styles.component}>
+                <div className={styles.lable}>Bank passbook (PNG or JPEG)</div>
                 <input
                   className={styles.inputBox}
                   name="bankPassbook"
@@ -413,7 +425,9 @@ function Add() {
                 />
               </div>
               <div className={styles.component}>
-                <div className={styles.lable}>Cancelled cheque</div>
+                <div className={styles.lable}>
+                  Cancelled cheque (PNG or JPEG)
+                </div>
                 <input
                   className={styles.inputBox}
                   name="cancelledCheque"

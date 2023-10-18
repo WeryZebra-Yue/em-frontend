@@ -585,6 +585,37 @@ function Open() {
                 </div>
               </div>
               <div className={styles.component} title="Click to Copy">
+                <div className={styles.lable}>Bank Name</div>
+                <div
+                  onClick={() => {
+                    // copy to clipboard
+                    navigator.clipboard.writeText(
+                      data?.documents?.bankdetails?.branch
+                    );
+                    toast.success("Copied to clipboard");
+                  }}
+                  className={styles.inputBox}
+                  required
+                  name="branch"
+                  type="text"
+                  placeholder="Bank Name"
+                  value={data?.documents?.bankdetails?.branch}
+                  disabled={!data?.documents?.bankdetails?.branch}
+                  style={{
+                    background: data?.documents?.bankdetails?.branch
+                      ? "white"
+                      : "",
+                    color: data?.documents?.bankdetails?.branch
+                      ? "black"
+                      : "rgb(84, 84, 84)",
+                  }}
+                >
+                  {data?.documents?.bankdetails?.branch
+                    ? data?.documents?.bankdetails?.branch
+                    : "Branch"}
+                </div>
+              </div>
+              <div className={styles.component} title="Click to Copy">
                 <div className={styles.lable}>Account No.</div>
                 <div
                   onClick={() => {

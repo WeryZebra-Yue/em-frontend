@@ -265,7 +265,7 @@ function Root({ props }) {
             <button
               onClick={() => {
                 {
-                  permission[0] !== "WRITE"
+                  permission[0] === "WRITE"
                     ? history.push("/edit", {
                         row,
 
@@ -296,7 +296,7 @@ function Root({ props }) {
               className={styles.add + " " + styles.button}
             >
               {/* Open  */}
-              {permission[0] !== "WRITE" ? "Edit" : "View"}
+              {permission[0] === "WRITE" ? "Edit" : "View"}
             </button>
             {permission[0] === "WRITE" && (
               <button

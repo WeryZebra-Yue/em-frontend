@@ -172,6 +172,10 @@ function Root({ props }) {
       name: "Subject Code",
     },
     {
+      key: "conveyer",
+      name: "Subject Conveyer",
+    },
+    {
       key: "date",
       name: "Date",
     },
@@ -455,9 +459,10 @@ function Root({ props }) {
         ? data[0]?.documents?.bankdetails?.ifscCode
         : "",
       kilometres: distance,
-      ta: `${100 * distance}`,
+      ta: `${10 * distance}`,
       da: 200,
-      total: `${100 * distance + 200}`,
+      total: `${10 * distance + 200}`,
+      conveyer: "",
     };
     const missingParams = [];
     for (let key in params) {

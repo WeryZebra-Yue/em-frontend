@@ -1,8 +1,17 @@
 import styles from "./Header.module.css";
 import logo from "../../Assets/General/Images/logo.png";
 import { useNavigate } from "react-router-dom";
+import Button from "../Button";
+import { useDispatch, useSelector } from "react-redux";
+import { Cookies } from "react-cookie";
+import { useEffect } from "react";
 function Header() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state: any) => state.auth.user);
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
   return (
     <>
       <div
@@ -13,7 +22,43 @@ function Header() {
           left: 0,
         }}
       >
-        <img onClick={() => navigate("/")} src={logo} />
+        <img onClick={() => navigate("/dashboard")} src={logo} />
+        <div>
+          {user && (
+            <>
+              {" "}
+              {user.admin ? (
+                <Button
+                  variant="outlined"
+                  className={styles.button}
+                  onClick={() =>
+                    navigate(
+                      window.location.pathname === "/admin"
+                        ? "/dashboard"
+                        : "/admin"
+                    )
+                  }
+                >
+                  {window.location.pathname === "/admin"
+                    ? "Dashboard"
+                    : "Admin Panel"}
+                </Button>
+              ) : null}
+              <Button
+                variant="outlined"
+                className={styles.button}
+                onClick={() => {
+                  const cookie = new Cookies();
+                  cookie.remove("token-ex");
+                  dispatch({ type: "SIGN_OUT" });
+                  navigate("/");
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </>
   );

@@ -1,10 +1,13 @@
-import Auth from "../pages/Auth";
-import { useSelector } from "react-redux";
-import { Routes, Route } from "react-router-dom";
-import Header from "../components/Header/Header";
-import Loader from "../pages/Loader";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
+import Auth from "../pages/Auth";
 import Admin from "../pages/Admin";
+import Loader from "../pages/Loader";
+import Dashboard from "../pages/Dashboard";
+
+import Header from "../components/Header/Header";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 const Router = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -24,9 +27,13 @@ const Router = () => {
       ) : (
         <>
           <Routes>
-            <Route path="/" element={user ? <div>Dashboard</div> : <Auth />} />
+            <Route
+              path="/"
+              element={user ? <Navigate to="/dashboard" /> : <Auth />}
+            />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/*" element={<div>Not Found</div>} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/*" element={<Navigate to="/" />} />
           </Routes>
         </>
       )}

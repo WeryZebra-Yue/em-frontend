@@ -51,13 +51,23 @@ const Admin = () => {
   useEffect(() => {
     const cookie = new Cookies();
     if (!cookie.get("token-ex")) return navigate("/");
-    if (!user.admin) return navigate("/dashboard");
+    if (user) {
+      if (!user.admin) return navigate("/dashboard");
+    }
     fetchCreds();
-  }, []);
+  }, [user]);
   async function fetchCreds() {
     await getAdmins().then((res) => {
       if (credentials.length === 1)
-        setCredentials((credentials) => [...credentials, ...res]);
+        setCredentials((credentials) => [
+          {
+            email: "developer@ppsu.db",
+            passwordLength: 8,
+            password: "",
+            role: "WRITE",
+          },
+          ...res,
+        ]);
     });
   }
   async function fetchUni() {

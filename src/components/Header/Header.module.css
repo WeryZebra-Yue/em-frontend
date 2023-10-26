@@ -3,9 +3,24 @@
   position: fixed;
   width: 100%;
   background-color: var(--header-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+.header div {
+  display: flex;
+  gap: 15px;
+  margin-right: 20px;
 }
 .header img {
   display: block;
   height: 50px;
   margin: 20px;
+}
+.button {
+  color: black !important;
+  background-color: #ffaa46 !important;
+  border: 1px solid black !important;
+  transition: all 0.3s ease-in-out;
 }

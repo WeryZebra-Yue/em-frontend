@@ -9,9 +9,12 @@ import { AuthService } from "../../services/admin.service";
 import styles from "./Auth.module.css";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AUTH_IN } from "../../redux/Auth/AuthActions";
 
 function Auth() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -27,28 +30,37 @@ function Auth() {
     setError(false);
     const response = await AuthService(email, password);
     dismissToastie();
-    if (response.status === 200) {
-      const cookie = new Cookies();
-      cookie.set("token-ex", response.token, {
-        path: "/",
-        maxAge: 3600,
-      });
+    try {
+      if (response.status === 200) {
+        const cookie = new Cookies();
+        console.log(response.token);
+        cookie.set("token-ex", response.token, {
+          path: "/",
+          maxAge: 3600,
+        });
+        dispatch({
+          type: AUTH_IN,
+          payload: null,
+        });
 
-      if (email === "coe@ppsu.ac.in" || email === "developer@ppsu.db")
-        navigate("/admin", {
-          state: {
-            token: response.token,
-          },
+        if (email === "coe@ppsu.ac.in" || email === "developer@ppsu.db")
+          return navigate("/admin", {
+            state: {
+              token: response.token,
+            },
+          });
+        else {
+        }
+      } else if (response.status === 400) {
+        setError(true);
+        toastify(response.message, "error", {
+          autoClose: 1000,
         });
-      else
-        navigate("/dashboard", {
-          state: {
-            token: response.token,
-          },
-        });
-    } else if (response.status === 400) {
+      }
+    } catch (err) {
+      console.log(err);
       setError(true);
-      toastify(response.message, "error", {
+      toastify("Something went wrong", "error", {
         autoClose: 1000,
       });
     }

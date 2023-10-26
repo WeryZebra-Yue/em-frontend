@@ -7,3 +7,5 @@ export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 export const SET_USER_DATA_ERROR = "SET_USER_DATA_ERROR";
 export const SET_LOADING = "SET_LOADING";
 export const NO_USER = "NO_USER";
+export const AUTH_IN = "AUTH_IN";
+export const LOADING = "LOADING";

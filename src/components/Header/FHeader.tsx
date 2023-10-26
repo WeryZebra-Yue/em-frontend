@@ -13,7 +13,7 @@ function FHeader() {
           left: 0,
         }}
       >
-        <img onClick={() => navigate("/")} src={logo} />
+        <img onClick={() => navigate("/dashboard")} src={logo} />
       </div>
     </>
   );

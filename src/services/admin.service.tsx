@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ADMIN_URL } from "../utils/general.constants";
 import { store } from "../store";
+import { AUTH_IN } from "../redux/Auth/AuthActions";
 
 export const AuthService = async (email: any, password: any) => {
   try {
@@ -10,11 +11,8 @@ export const AuthService = async (email: any, password: any) => {
     });
     if (data.token)
       store.dispatch({
-        type: "SET_USER",
-        payload: {
-          email: email,
-          token: data.token,
-        },
+        type: AUTH_IN,
+        payload: null,
       });
     return data;
   } catch (err) {

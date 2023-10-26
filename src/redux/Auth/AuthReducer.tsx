@@ -5,12 +5,14 @@ import {
   SIGN_UP,
   SET_USER,
   SET_LOADING,
+  AUTH_IN,
 } from "./AuthActions";
 
 const AuthReducer = (
   state = {
     loading: true,
     user: null,
+    authIn: false,
   },
   action: any
 ) => {
@@ -48,7 +50,12 @@ const AuthReducer = (
         loading: false,
       };
     }
-
+    case AUTH_IN: {
+      return {
+        ...state,
+        auth: true,
+      };
+    }
     case SET_LOADING: {
       return {
         ...state,

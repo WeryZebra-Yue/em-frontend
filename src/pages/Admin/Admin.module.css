@@ -5,6 +5,10 @@
   flex-direction: column;
   text-align: center;
 }
+/* rmove scroll */
+::-webkit-scrollbar {
+  display: none;
+}
 
 .form {
   display: flex;
@@ -27,7 +31,6 @@
   border-radius: 10px;
   margin: 10px;
 }
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
 .button {
   width: max-content !important;
   padding: 10px 12px 10px 12px !important;

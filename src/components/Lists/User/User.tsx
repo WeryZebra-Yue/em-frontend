@@ -16,7 +16,7 @@ function User({
   setCredentials,
   getPasswordForUser,
 }: any) {
-  const [dev, setDev] = React.useState(email === "developer@ppsu.db");
+  const [dev] = React.useState(email === "developer@ppsu.db");
   const [role_, setRole] = React.useState<string | null>(null);
   const [password_, setPassword] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);

@@ -4,7 +4,7 @@ import styles from "./Button.module.css";
 import { useState } from "react";
 
 function Button(props: any) {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [, setInnerWidth] = useState(window.innerWidth);
   window.addEventListener("resize", () => {
     setInnerWidth(window.innerWidth);
   });

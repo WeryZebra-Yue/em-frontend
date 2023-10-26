@@ -1,6 +1,6 @@
 import axios from "axios";
-import { UPLOAD_IMAGE_URL } from "../Utils/constants";
-export const uploadImage = async (images) => {
+import { UPLOAD_IMAGE_URL } from "../utils/general.constants";
+export const uploadImage = async (images: any) => {
   try {
     const formData = new FormData();
     formData.append("photo", images);

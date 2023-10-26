@@ -1,0 +1,46 @@
+.button {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  text-transform: capitalize !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+.error {
+  color: var(--error) !important;
+  border-color: var(--error) !important;
+}
+@media (max-width: 768px) {
+  .button {
+    align-items: center;
+    width: 100%;
+    margin-right: 0px !important;
+  }
+}
+.contained {
+  margin: 20px 20px 0px 0px !important;
+  color: white !important;
+}
+.round {
+  width: 40px;
+  height: 40px;
+  border-radius: 50% !important;
+  padding: 0px !important;
+  min-width: unset;
+}
+.notselected {
+  color: #00000061 !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+.disabled {
+  color: #00000061 !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+  background-color: #00000061 !important;
+}
+.responsive {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 25px !important;
+  min-width: unset !important;
+  margin-left: 10px !important;
+}

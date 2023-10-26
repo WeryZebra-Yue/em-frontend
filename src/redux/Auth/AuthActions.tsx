@@ -1,0 +1,9 @@
+export const SIGN_IN = "SIGN_IN";
+export const SIGN_OUT = "SIGN_OUT";
+export const SIGN_UP = "SIGN_UP";
+export const SET_USER = "SET_USER";
+export const SET_USER_DATA = "SET_USER_DATA";
+export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
+export const SET_USER_DATA_ERROR = "SET_USER_DATA_ERROR";
+export const SET_LOADING = "SET_LOADING";
+export const NO_USER = "NO_USER";

@@ -1,0 +1,130 @@
+.main {
+  background-color: var(--root-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  color: #fff;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: max-content;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  color: black;
+  font-size: 1rem;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #e9e9e9 !important;
+}
+
+.lable {
+  padding: 10px;
+  padding-left: 2px;
+  text-align: left;
+}
+.forgotPassword {
+  width: 100%;
+  cursor: pointer;
+}
+
+.forgotPassword div {
+  padding: 10px;
+  padding-left: 2px;
+  text-align: left;
+  color: #8d8d8d;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.title {
+  font-size: 1.3rem;
+  margin: 1rem;
+  color: #e9e9e9;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+.input {
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 0px solid white;
+  background-color: #fff !important;
+  padding: 18px 15px 18px 15px;
+}
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+.component {
+  margin-bottom: 25px;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 100%;
+}
+.captcha div {
+  width: 220px;
+  font-size: 0.9rem;
+  color: #8d8d8d;
+}
+.captcha {
+  width: 180px;
+  transform: scale(0.8);
+}
+.g-recaptcha {
+  width: 200px;
+  border-radius: 10px;
+}
+iframe {
+  border-radius: 10px;
+  border: 2px solid #8d8d8d;
+}
+
+.image img {
+  padding: 20px;
+}
+
+.logOut {
+  width: max-content;
+  padding: 11px 29px 11px 29px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 2px solid black;
+  outline: none;
+  background-color: #ffaa46;
+  color: black;
+  cursor: pointer;
+  justify-self: center;
+  align-self: center;
+  margin-bottom: 30px;
+}
+.submitDisable {
+  color: white !important;
+  background-color: red !important;
+}
+.submit {
+  width: 100% !important;
+  border-radius: 5px !important;
+}
+.submitActive {
+  color: black !important;
+  background-color: #ffaa46 !important;
+  border: 1px solid black !important;
+}

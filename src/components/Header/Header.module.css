@@ -1,0 +1,11 @@
+.header {
+  color: #fff;
+  position: fixed;
+  width: 100%;
+  background-color: var(--header-color);
+}
+.header img {
+  display: block;
+  height: 50px;
+  margin: 20px;
+}

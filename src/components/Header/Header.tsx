@@ -1,17 +1,13 @@
-import styles from "./Header.module.css";
-import logo from "../../Assets/General/Images/logo.png";
-import { useNavigate } from "react-router-dom";
 import Button from "../Button";
-import { useDispatch, useSelector } from "react-redux";
 import { Cookies } from "react-cookie";
-import { useEffect } from "react";
+import styles from "./Header.module.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import logo from "../../Assets/General/Images/logo.png";
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
   return (
     <>
       <div

@@ -4,8 +4,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 600 !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
 }
 body {
   background-color: var(--root-color);
@@ -26,4 +26,19 @@ body {
   width: max-content;
   padding: 0px !important;
   background: transparent;
+}
+.css-sq9qdz {
+  width: 100vw !important;
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+.custom-autocomplete .MuiAutocomplete-popper {
+  flex-direction: column-reverse;
+}
+
+/* Adjust the spacing between dropdown items if needed */
+.custom-autocomplete .MuiAutocomplete-listbox {
+  padding: 8px 0; /* You can adjust the padding as per your preference */
 }

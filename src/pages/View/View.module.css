@@ -81,23 +81,35 @@ input {
   padding: 8px 10px 8px 10px;
   width: 220px;
   font-size: 1rem;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 0px solid white;
   outline: none;
   font-family: "Poppins", sans-serif;
 }
 .areaofinterest {
-  width: 100%;
+  width: 220px !important;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
   background-color: white;
 }
 .areaofinterest div {
   margin: 0px 10px;
+}
+.areaofinterestText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wrapperArea {
+  align-items: center;
+  background: #fff;
+  border-radius: 5px;
+  padding-right: 10px;
+  display: grid;
+  grid-template-columns: 190px 20px;
 }

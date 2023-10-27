@@ -40,6 +40,16 @@ export const addExaminer = async (user: any) => {
     throw err;
   }
 };
+export const deleteExaminer = async (id: any) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/deleteExaminer", {
+      id: id,
+    });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
 export const updateExaminer = async (user: any) => {
   try {
     const { data } = await axios.post(ADMIN_URL + "/updateExaminer", user);
@@ -124,6 +134,14 @@ export const updateUniversity = async (university: any) => {
       ADMIN_URL + "/updateUniversity",
       university
     );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+export const getMetaData = async () => {
+  try {
+    const { data } = await axios.get(ADMIN_URL + "/getMetaData");
     return data;
   } catch (err) {
     throw err;

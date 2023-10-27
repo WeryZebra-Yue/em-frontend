@@ -4,10 +4,12 @@ import styles from "./Header.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../Assets/General/Images/logo.png";
+import { useEffect } from "react";
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
+
   return (
     <>
       <div
@@ -20,26 +22,26 @@ function Header() {
       >
         <img onClick={() => navigate("/dashboard")} src={logo} />
         <div>
-          {user && (
+          {user ? (
             <>
               {" "}
-              {user.admin ? (
-                <Button
-                  variant="outlined"
-                  className={styles.button}
-                  onClick={() =>
-                    navigate(
-                      window.location.pathname === "/admin"
-                        ? "/dashboard"
-                        : "/admin"
-                    )
-                  }
-                >
-                  {window.location.pathname === "/admin"
-                    ? "Dashboard"
-                    : "Admin Panel"}
-                </Button>
-              ) : null}
+              {/* {user.admin ? ( */}
+              <Button
+                variant="outlined"
+                className={styles.button}
+                onClick={() =>
+                  navigate(
+                    window.location.pathname === "/admin"
+                      ? "/dashboard"
+                      : "/admin"
+                  )
+                }
+              >
+                {window.location.pathname === "/admin"
+                  ? "Dashboard"
+                  : "Admin Panel"}
+              </Button>
+              {/* ) : null} */}
               <Button
                 variant="outlined"
                 className={styles.button}
@@ -53,6 +55,8 @@ function Header() {
                 Logout
               </Button>
             </>
+          ) : (
+            <></>
           )}
         </div>
       </div>

@@ -6,6 +6,9 @@ import {
 } from "@mui/icons-material";
 import { MenuItem } from "@mui/material";
 import styles from "../../src/pages/Dashboard/Dashboard.module.css";
+import { deleteExaminer } from "../services/admin.service";
+import { store } from "../store";
+import { SET_LOADING } from "../redux/Auth/AuthActions";
 export const MetricTable: {
   Header: MetricHeader;
   Props: any;
@@ -27,7 +30,7 @@ export const MetricTable: {
     personal_email: {
       header: "Personal Email",
     },
-    institute_mail: {
+    "personalDetails.collegeemail": {
       header: "Institute Mail",
     },
     "instituteDetails.role": {
@@ -49,7 +52,7 @@ export const MetricTable: {
       columnVisibility: {
         mobile: false,
         personal_email: false,
-        institute_mail: false,
+        "personalDetails.collegeemail": false,
         "instituteDetails.role": false,
       },
       sorting: [
@@ -89,14 +92,6 @@ export const MetricTable: {
       ClearAllIcon: () => <HighlightOffOutlined fontSize="small" />,
       CloseIcon: () => <HighlightOffOutlined fontSize="small" />,
     },
-    renderRowActionMenuItems: (row: any) => [
-      <MenuItem key="delete" onClick={() => console.info(row)}>
-        <div className={styles.menuItem}>Edit Examiner</div>
-      </MenuItem>,
-      <MenuItem key="view" onClick={() => console.info(row)}>
-        <div className={styles.menuItem}>Download Form</div>
-      </MenuItem>,
-    ],
   },
 };
 
@@ -166,48 +161,48 @@ export const _input = {
   },
   roles: {
     label: "Roles",
-    type: "multiple",
+    type: "checkbox",
     placeholder: "Enter Roles",
     category: ["Examiner", "Paper setter", "Expert"],
   },
   "documents.rcbook": {
-    label: "RC Book (PNG or JPEG)",
+    label: "RC Book (PDF / IMAGE^)",
     type: "file",
-    placeholder: "Enter RC Book (PNG or JPEG)",
+    placeholder: "Enter RC Book (PDF / IMAGE^)",
   },
   "documents.drivinglicenes": {
-    label: "Driving Licence (PNG or JPEG)",
+    label: "Driving Licence (PDF / IMAGE^)",
     type: "file",
-    placeholder: "Enter Driving Licence (PNG or JPEG)",
+    placeholder: "Enter Driving Licence (PDF / IMAGE^)",
   },
-  "documents.bank.bankName": {
+  "bankDetails.bankName": {
     label: "Bank Name",
     type: "text",
     placeholder: "Enter Bank Name",
   },
-  "documents.bank.accountNumber": {
+  "bankDetails.accountNumber": {
     label: "Account No.",
     type: "text",
     placeholder: "Enter Account No.",
   },
-  "documents.bank.branch": {
+  "bankDetails.branch": {
     label: "Branch",
     type: "text",
     placeholder: "Enter Branch",
   },
-  "documents.bank.ifscCode": {
+  "bankDetails.ifscCode": {
     label: "IFSC Code",
     type: "text",
     placeholder: "Enter IFSC Code",
   },
   "documents.passbook": {
-    label: "Bank passbook (PNG or JPEG)",
+    label: "Bank passbook (PDF / IMAGE^)",
     type: "file",
-    placeholder: "Enter Bank passbook (PNG or JPEG)",
+    placeholder: "Enter Bank passbook (PDF / IMAGE^)",
   },
   "documents.cheque": {
-    label: "Cancelled cheque (PNG or JPEG)",
+    label: "Cancelled cheque (PDF / IMAGE^)",
     type: "file",
-    placeholder: "Enter Cancelled cheque (PNG or JPEG)",
+    placeholder: "Enter Cancelled cheque (PDF / IMAGE^)",
   },
 };

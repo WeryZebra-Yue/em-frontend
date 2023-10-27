@@ -1,8 +1,8 @@
 import * as xlsx from "xlsx";
 import { toast } from "react-toastify";
-import { Alert, AlertColor } from "@mui/material";
+import { Alert, AlertColor, CircularProgress } from "@mui/material";
 export const toastify = (message: string, type: AlertColor, props?: any) => {
-  toast(
+  return toast(
     <>
       <Alert
         severity={type}
@@ -13,6 +13,20 @@ export const toastify = (message: string, type: AlertColor, props?: any) => {
         sx={{ width: "100%" }}
         aria-label={`${message}`}
         aria-activedescendant={`${message}`}
+        icon={
+          props?.loading ? (
+            <CircularProgress
+              color="inherit"
+              size="1.1rem"
+              thickness={6}
+              style={{
+                marginTop: "3px",
+              }}
+            />
+          ) : (
+            ""
+          )
+        }
       >
         {message}
       </Alert>
@@ -60,6 +74,7 @@ export const excel = (data: any[], name: string) => {
   xlsx.writeFile(wb, `${name}.xlsx`);
 };
 
-export const dismissToastie = () => {
-  toast.dismiss();
+export const dismissToastie = (_id?: any) => {
+  if (_id) toast.dismiss(_id);
+  else toast.dismiss();
 };

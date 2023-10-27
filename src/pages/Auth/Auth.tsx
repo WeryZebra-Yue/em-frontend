@@ -4,7 +4,7 @@ import { Cookies } from "react-cookie";
 import Button from "../../components/Button";
 
 import { dismissToastie, toastify } from "../../utils/general.helper";
-import { AuthService } from "../../services/admin.service";
+import { AuthService, verifyToken } from "../../services/admin.service";
 
 import styles from "./Auth.module.css";
 import { CircularProgress } from "@mui/material";
@@ -15,6 +15,7 @@ import { AUTH_IN } from "../../redux/Auth/AuthActions";
 function Auth() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cookie = new Cookies();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -36,7 +37,7 @@ function Auth() {
         console.log(response.token);
         cookie.set("token-ex", response.token, {
           path: "/",
-          maxAge: 3600,
+          // maxAge: 3600,
         });
         dispatch({
           type: AUTH_IN,
@@ -44,12 +45,13 @@ function Auth() {
         });
 
         if (email === "coe@ppsu.ac.in" || email === "developer@ppsu.db")
-          return navigate("/admin", {
-            state: {
-              token: response.token,
-            },
-          });
+          return (window.location.href = "/admin");
         else {
+          if (cookie.get("token-ex"))
+            verifyToken(cookie.get("token-ex")).then(
+              (res) => res && dispatch({ type: "SET_USER", payload: res })
+            );
+          return (window.location.href = "/dashboard");
         }
       } else if (response.status === 400) {
         setError(true);

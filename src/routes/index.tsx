@@ -10,7 +10,7 @@ import Header from "../components/Header/Header";
 import { Routes, Route, Navigate } from "react-router-dom";
 import View from "../pages/View";
 
-const Router = () => {
+const Router = ({ checkin }: any) => {
   const user = useSelector((state: any) => state.auth.user);
   const loading = useSelector((state: any) => state.auth.loading);
   const [delay, setDelay] = useState(true);
@@ -34,7 +34,9 @@ const Router = () => {
             />
             <Route path="/admin" element={<Admin />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/add" element={<View />} />
             <Route path="/view" element={<View />} />
+            <Route path="/edit/:id" element={<View />} />
             <Route path="/*" element={<Navigate to="/" />} />
           </Routes>
         </>

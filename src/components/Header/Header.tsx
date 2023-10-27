@@ -4,7 +4,6 @@ import styles from "./Header.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../Assets/General/Images/logo.png";
-import { useEffect } from "react";
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

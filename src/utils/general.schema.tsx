@@ -4,11 +4,8 @@ import {
   FilterListRounded,
   HighlightOffOutlined,
 } from "@mui/icons-material";
-import { MenuItem } from "@mui/material";
 import styles from "../../src/pages/Dashboard/Dashboard.module.css";
-import { deleteExaminer } from "../services/admin.service";
-import { store } from "../store";
-import { SET_LOADING } from "../redux/Auth/AuthActions";
+
 export const MetricTable: {
   Header: MetricHeader;
   Props: any;

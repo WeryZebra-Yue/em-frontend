@@ -59,7 +59,7 @@ const Admin = () => {
   async function fetchCreds() {
     await getAdmins().then((res) => {
       if (credentials.length === 1)
-        setCredentials((credentials) => [
+        setCredentials(() => [
           {
             email: "developer@ppsu.db",
             passwordLength: 8,

@@ -8,14 +8,11 @@ import { AuthService, verifyToken } from "../../services/admin.service";
 
 import styles from "./Auth.module.css";
 import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AUTH_IN } from "../../redux/Auth/AuthActions";
 
 function Auth() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cookie = new Cookies();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);

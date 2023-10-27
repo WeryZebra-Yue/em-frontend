@@ -6,7 +6,6 @@ import Header from "../../components/Header/FHeader";
 import { MetricTable } from "../../utils/general.schema";
 import {
   addExaminer,
-  addMultipleUsers,
   deleteExaminer,
   getAllExaminers,
   getMetaData,
@@ -28,12 +27,12 @@ import { MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-  const fileInput = useRef(null);
+  const fileInput = useRef<any>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [file, setFile] = useState<any>(null);
+  // const [file, setFile] = useState<any>(null);
   const [examiners, setExaminers] = useState<any[]>([]);
-  const [universities, setUniversities] = useState<any[]>([]);
+  const [, setUniversities] = useState<any[]>([]);
   const [rowSelection, setRowSelection] = useState<any[]>([]);
 
   useEffect(() => {

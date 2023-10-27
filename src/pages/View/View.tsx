@@ -163,6 +163,7 @@ function View() {
                         )}
                         // value={"P P Savani School of Engoineering, Kosamba"}
                         onChange={(e, value) => {
+                          console.log(e);
                           setNewExaminer({
                             ...newExaminer,
                             [accessor]: value.name,
@@ -458,7 +459,10 @@ function View() {
                         throw new Error("Account Number already exists");
                     });
                     let upload_len = Object.entries(_temp.documents).filter(
-                      ([acc, value]: any) => value
+                      ([acc, value]: any) => {
+                        console.log(acc, value);
+                        return value;
+                      }
                     ).length;
                     if (upload_len > 0)
                       toastify("Please do not close the tab", "info", {

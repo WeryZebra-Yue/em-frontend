@@ -10,7 +10,7 @@ import Header from "../components/Header/Header";
 import { Routes, Route, Navigate } from "react-router-dom";
 import View from "../pages/View";
 
-const Router = ({ checkin }: any) => {
+const Router = () => {
   const user = useSelector((state: any) => state.auth.user);
   const loading = useSelector((state: any) => state.auth.loading);
   const [delay, setDelay] = useState(true);

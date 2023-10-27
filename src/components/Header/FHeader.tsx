@@ -1,5 +1,5 @@
 import styles from "./Header.module.css";
-import logo from "../../Assets/General/Images/logo.png";
+import logo from "../../assets/General/Images/logo.png";
 import { useNavigate } from "react-router-dom";
 function FHeader() {
   const navigate = useNavigate();

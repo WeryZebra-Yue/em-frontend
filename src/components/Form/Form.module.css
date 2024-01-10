@@ -1,0 +1,124 @@
+.button {
+  width: 80% !important;
+  margin-top: 20px !important;
+  background-color: #ffaa46 !important;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+input {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.tableRow th,
+.tableRow td {
+  width: min-content !important;
+  min-width: unset !important;
+  color: var(--primary) !important;
+  font-size: 0.9em;
+  letter-spacing: 0.06em;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  letter-spacing: 0.5px;
+}
+.tableRow th {
+  font-weight: 700;
+}
+.tableRow td {
+  color: var(--primary);
+}
+.tableRow td:first-child {
+  border-left: none;
+}
+.tableRow:last-child td {
+  padding-bottom: 30px;
+  padding-bottom: 2em;
+}
+.menuItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 5px;
+}
+.tableRow {
+  cursor: pointer;
+}
+.topToolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px;
+  margin-left: 10px;
+}
+.topToolbar button {
+  padding: 5px 20px !important;
+  /* border: 1px solid rgba(0, 0, 0, 0.4) !important;
+      color: rgba(0, 0, 0, 0.4) !important; */
+}
+.rowSelec {
+  border: 1px solid rgba(0, 0, 0, 1) !important;
+  color: rgba(0, 0, 0, 1) !important;
+}
+.rowSelecDisabled {
+  /* border: 1px solid rgba(0, 0, 0, 0.4) !important;
+      color: rgba(0, 0, 0, 0.4) !important; */
+  cursor: not-allowed;
+}
+
+.toolBar {
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+}
+.title {
+  font-size: 1.5rem;
+  padding: 1.5rem;
+  margin-bottom: 0rem !important;
+  color: #e9e9e9;
+  font-weight: bold !important;
+}
+.inputBox {
+  padding: 8px 10px 8px 10px;
+  width: 220px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 0px solid white;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+.areaofinterest {
+  width: 220px !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+}
+.areaofinterest div {
+  margin: 0px 10px;
+}
+.areaofinterestText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wrapperArea {
+  align-items: center;
+  background: #fff;
+  border-radius: 5px;
+  padding-right: 10px;
+  display: grid;
+  grid-template-columns: 190px 20px;
+}

@@ -3,22 +3,28 @@ import { Cookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { useEffect, useState, useMemo, useRef } from "react";
 import Header from "../../components/Header/FHeader";
-import { MetricTable, _input } from "../../utils/general.schema";
+import {
+  AssignmentTable,
+  MetricTable,
+  _input,
+} from "../../utils/general.schema";
 import {
   addExaminer,
   deleteExaminer,
   getAllExaminers,
+  getAssignments,
   getMetaData,
   getUniversities,
 } from "../../services/admin.service";
 
-import styles from "./Dashboard.module.css";
+import styles from "./Assignment.module.css";
 import Button from "../../components/Button";
 import MaterialReactTable from "material-react-table";
 
 import { SET_LOADING } from "../../redux/Auth/AuthActions";
 import {
   cleanify,
+  cleanifyAssignment,
   dismissToastie,
   excel,
   toastify,
@@ -28,7 +34,7 @@ import { useNavigate } from "react-router-dom";
 import Form from "../../components/Form";
 import Excel from "../../components/Excel";
 
-function Dashboard() {
+function Assignment() {
   const fileInput = useRef<any>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +48,7 @@ function Dashboard() {
     examiner: [],
   });
   const [examiners, setExaminers] = useState<any[]>([]);
+  const [assignments, setAssignments] = useState<any[]>([]);
   const [, setUniversities] = useState<any[]>([]);
   const [rowSelection, setRowSelection] = useState<any[]>([]);
 
@@ -61,9 +68,7 @@ function Dashboard() {
       const cookie = new Cookies();
       const _universities = await getUniversities();
       const _examiner = await getAllExaminers(cookie.get("token-ex"));
-      // if (!localStorage.getItem("examiners"))
       localStorage.setItem("examiners", JSON.stringify(_examiner));
-      // if (!localStorage.getItem("universities"))
       localStorage.setItem("universities", JSON.stringify(_universities));
 
       setExaminers(JSON.parse(localStorage.getItem("examiners") || "{}"));
@@ -95,6 +100,9 @@ function Dashboard() {
           JSON.parse(localStorage.getItem("universities") || "{}")
         );
       }
+      const assignments = await getAssignments();
+      setAssignments(assignments);
+      console.log(assignments);
       dismissToastie();
       toastify("Data fetched successfully.", "success", {
         autoClose: 1000,
@@ -106,10 +114,10 @@ function Dashboard() {
       <Header />
       {/* {examiners && examiners.length > 0 && ( */}
       <MaterialReactTable
-        data={examiners}
+        data={assignments}
         columns={useMemo(
           () =>
-            Object.entries(MetricTable.Header).map(([accessor, value]) => ({
+            Object.entries(AssignmentTable.Header).map(([accessor, value]) => ({
               ...value,
               accessorKey: accessor,
             })) as any,
@@ -168,7 +176,7 @@ function Dashboard() {
         ]}
         renderTopToolbarCustomActions={() => (
           <div className={styles.topToolbar}>
-            <Button
+            {/* <Button
               variant="outlined"
               onClick={() => {
                 navigate("/add");
@@ -183,25 +191,25 @@ function Dashboard() {
               }}
             >
               Import from Excel
-            </Button>
+            </Button> */}
             <Button
               variant="outlined"
               onClick={() => {
-                const cleaned = cleanify(
+                const cleaned = cleanifyAssignment(
                   Object.keys(rowSelection).length > 0
                     ? Object.keys(rowSelection).map(
-                        (key) => examiners[parseInt(key)]
+                        (key) => assignments[parseInt(key)]
                       )
-                    : examiners
+                    : assignments
                 );
-                excel(cleaned, "examiners");
+                excel(cleaned, "assignments");
               }}
             >
               Export to Excel
             </Button>
           </div>
         )}
-        {...MetricTable.Props}
+        {...AssignmentTable.Props}
       />
       <input
         type="file"
@@ -451,4 +459,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Assignment;

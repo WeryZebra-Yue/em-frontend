@@ -147,3 +147,20 @@ export const getMetaData = async () => {
     throw err;
   }
 };
+export const addAssign = async (assign: any) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/assign", assign);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getAssignments = async () => {
+  try {
+    const { data } = await axios.get(ADMIN_URL + "/assignments");
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

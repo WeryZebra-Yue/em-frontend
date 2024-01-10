@@ -9,6 +9,7 @@ import Dashboard from "../pages/Dashboard";
 import Header from "../components/Header/Header";
 import { Routes, Route, Navigate } from "react-router-dom";
 import View from "../pages/View";
+import Assignment from "../pages/Assignment";
 
 const Router = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -37,6 +38,7 @@ const Router = () => {
             <Route path="/add" element={<View />} />
             <Route path="/view" element={<View />} />
             <Route path="/edit/:id" element={<View />} />
+            <Route path="/assignment" element={<Assignment />} />
             <Route path="/*" element={<Navigate to="/" />} />
           </Routes>
         </>

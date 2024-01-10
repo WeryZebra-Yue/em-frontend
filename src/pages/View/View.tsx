@@ -64,7 +64,6 @@ function View() {
       } else {
         const _temp = { ...examiner[0] };
         setId(examiner[0]._id);
-        console.log(examiner[0]);
         Object.entries(examiner[0]).map(([accessor, value]: any) => {
           if (accessor === "roles") return;
           if (typeof value === "object") {
@@ -118,6 +117,7 @@ function View() {
               {Object.entries(_input).map(([accessor, value]: any) => {
                 return (
                   <div
+                    hidden={value.hide}
                     style={{
                       marginBottom: "10px",
                       marginLeft: "20px",

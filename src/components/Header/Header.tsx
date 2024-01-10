@@ -40,6 +40,13 @@ function Header() {
                   ? "Dashboard"
                   : "Admin Panel"}
               </Button>
+              <Button
+                variant="outlined"
+                className={styles.button}
+                onClick={() => navigate("/assignment")}
+              >
+                Assignments
+              </Button>
               {/* ) : null} */}
               <Button
                 variant="outlined"

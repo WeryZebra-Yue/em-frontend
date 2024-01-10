@@ -67,6 +67,52 @@ export const cleanify = (objs: any) => {
   });
   return cleaned;
 };
+// {
+//   "_id": "656570df9d3f584ea5559ab9",
+//   "formDetails": {
+//       "date": "2023-11-28",
+//       "conveyer": "VARUN THUMMAR",
+//       "course": "Computer Engineering",
+//       "code": "SECE04042",
+//       "semester": "7",
+//       "degree": "Degree"
+//   },
+//   "travelDetails": {
+//       "mode": "Car",
+//       "city": " Ahmedabad",
+//       "kilometres": 241,
+//       "da": 200,
+//       "ta": 4820,
+//       "manual": 0,
+//       "institute": "Nirma Univeristy, Ahmedabad"
+//   },
+//   "payDetails": {
+//       "total": 5020
+//   },
+//   "__v": 0
+// }
+export const cleanifyAssignment = (objs: any) => {
+  const cleaned = objs.map((obj: any) => {
+    return {
+      "Sr. No.": obj?.formDetails?.code,
+      Date: obj?.formDetails?.date,
+      Conveyer: obj?.formDetails?.conveyer,
+      Course: obj?.formDetails?.course,
+      Semester: obj?.formDetails?.semester,
+      Degree: obj?.formDetails?.degree,
+      Mode: obj?.travelDetails?.mode,
+      City: obj?.travelDetails?.city,
+      Kilometres: obj?.travelDetails?.kilometres,
+      DA: obj?.travelDetails?.da,
+      TA: obj?.travelDetails?.ta,
+      Manual: obj?.travelDetails?.manual,
+      Institute: obj?.travelDetails?.institute,
+      Total: obj?.payDetails?.total,
+    };
+  });
+  return cleaned;
+};
+
 export const excel = (data: any[], name: string) => {
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.json_to_sheet(data);

@@ -1,8 +1,5 @@
 import {
-  Autocomplete,
-  Checkbox,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -10,7 +7,6 @@ import {
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import { dismissToastie, toastify } from "../../utils/general.helper";
-import { uploadImage } from "../../services/storage.service";
 import { AssignmentRounded } from "@mui/icons-material";
 
 import { addAssign, updateExaminer } from "../../services/admin.service";

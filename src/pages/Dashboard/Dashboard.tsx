@@ -5,7 +5,6 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import Header from "../../components/Header/FHeader";
 import { MetricTable, _input } from "../../utils/general.schema";
 import {
-  addExaminer,
   deleteExaminer,
   getAllExaminers,
   getMetaData,
@@ -218,7 +217,7 @@ function Dashboard() {
               const worksheet = workbook.Sheets[sheetName];
               const json = xlsx.utils.sheet_to_json(worksheet);
               let newData: any = [];
-              json.map(async (item: any, index: number) => {
+              json.map(async (item: any) => {
                 const res: any = {
                   e_id: item.Code,
                   personalDetails: {

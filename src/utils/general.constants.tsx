@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3030/api/v1";
+const BASE_URL = "https://project-exam-backend-o9od.vercel.app/api/v1";
 
 export const EXAMPLE_URL = `${BASE_URL}/examples`;
 export const ADMIN_URL = `${BASE_URL}/admin`;

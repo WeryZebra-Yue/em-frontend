@@ -75,7 +75,7 @@ function View() {
           }
           delete _temp[accessor];
         });
-        setAreaofinterest(_temp?.areaofinterest || []);
+        setAreaofinterest(examiner[0]?.personalDetails?.areaofinterest || []);
         setNewExaminer(_temp);
       }
     } else {

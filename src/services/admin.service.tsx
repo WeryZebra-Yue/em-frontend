@@ -22,6 +22,7 @@ export const AuthService = async (email: any, password: any) => {
 
 export const getAllExaminers = async (token: any) => {
   try {
+    console.log(token);
     const { data } = await axios.get(ADMIN_URL + "/getAllExaminers", {
       headers: {
         Authorization: `Bearer ${token}`,

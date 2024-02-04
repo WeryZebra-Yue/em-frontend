@@ -120,89 +120,89 @@ function Assignment() {
         state={{ rowSelection }}
         selectedRows={rowSelection}
         onRowSelectionChange={setRowSelection}
-        renderRowActionMenuItems={(row: any) => [
-          <MenuItem
-            key="edit"
-            onClick={() => {
-              navigate(`/edit/${row.row.original.eid}`, {
-                state: {
-                  examiner: row.row.original,
-                },
-              });
-            }}
-          >
-            <div className={styles.menuItem}>Edit </div>
-          </MenuItem>,
-          <MenuItem
-            key="view"
-            onClick={() => {
-              setFormPop({
-                open: true,
-                examiner: row.row.original,
-              });
-            }}
-          >
-            <div className={styles.menuItem}>Assign</div>
-          </MenuItem>,
+        // renderRowActionMenuItems={(row: any) => [
+        //   <MenuItem
+        //     key="edit"
+        //     onClick={() => {
+        //       navigate(`/edit/${row.row.original.eid}`, {
+        //         state: {
+        //           examiner: row.row.original,
+        //         },
+        //       });
+        //     }}
+        //   >
+        //     <div className={styles.menuItem}>Edit </div>
+        //   </MenuItem>,
+        //   <MenuItem
+        //     key="view"
+        //     onClick={() => {
+        //       setFormPop({
+        //         open: true,
+        //         examiner: row.row.original,
+        //       });
+        //     }}
+        //   >
+        //     <div className={styles.menuItem}>Assign</div>
+        //   </MenuItem>,
 
-          <MenuItem
-            key="delete"
-            onClick={async () => {
-              toastify("Examiner is being removed.", "info", {
-                autoClose: false,
-                loading: true,
-              });
-              await deleteExaminer(row.row.original._id);
-              const _temp = examiners.filter(
-                (examiner) => examiner._id !== row.row.original._id
-              );
-              setExaminers(_temp);
-              localStorage.setItem("examiners", JSON.stringify(_temp));
-              dismissToastie();
-              toastify("Examiner removed successfully.", "success", {
-                autoClose: 1000,
-              });
-            }}
-          >
-            {" "}
-            <div className={styles.menuItem}>Remove </div>
-          </MenuItem>,
-        ]}
-        renderTopToolbarCustomActions={() => (
-          <div className={styles.topToolbar}>
-            {/* <Button
-              variant="outlined"
-              onClick={() => {
-                navigate("/add");
-              }}
-            >
-              Add Examiner
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                if (fileInput.current) fileInput.current?.click();
-              }}
-            >
-              Import from Excel
-            </Button> */}
-            <Button
-              variant="outlined"
-              onClick={() => {
-                const cleaned = cleanifyAssignment(
-                  Object.keys(rowSelection).length > 0
-                    ? Object.keys(rowSelection).map(
-                        (key) => assignments[parseInt(key)]
-                      )
-                    : assignments
-                );
-                excel(cleaned, "assignments");
-              }}
-            >
-              Export to Excel
-            </Button>
-          </div>
-        )}
+        //   <MenuItem
+        //     key="delete"
+        //     onClick={async () => {
+        //       toastify("Examiner is being removed.", "info", {
+        //         autoClose: false,
+        //         loading: true,
+        //       });
+        //       await deleteExaminer(row.row.original._id);
+        //       const _temp = examiners.filter(
+        //         (examiner) => examiner._id !== row.row.original._id
+        //       );
+        //       setExaminers(_temp);
+        //       localStorage.setItem("examiners", JSON.stringify(_temp));
+        //       dismissToastie();
+        //       toastify("Examiner removed successfully.", "success", {
+        //         autoClose: 1000,
+        //       });
+        //     }}
+        //   >
+        //     {" "}
+        //     <div className={styles.menuItem}>Remove </div>
+        //   </MenuItem>,
+        // ]}
+        // renderTopToolbarCustomActions={() => (
+        //   <div className={styles.topToolbar}>
+        //     {/* <Button
+        //       variant="outlined"
+        //       onClick={() => {
+        //         navigate("/add");
+        //       }}
+        //     >
+        //       Add Examiner
+        //     </Button>
+        //     <Button
+        //       variant="outlined"
+        //       onClick={() => {
+        //         if (fileInput.current) fileInput.current?.click();
+        //       }}
+        //     >
+        //       Import from Excel
+        //     </Button> */}
+        //     <Button
+        //       variant="outlined"
+        //       onClick={() => {
+        //         const cleaned = cleanifyAssignment(
+        //           Object.keys(rowSelection).length > 0
+        //             ? Object.keys(rowSelection).map(
+        //                 (key) => assignments[parseInt(key)]
+        //               )
+        //             : assignments
+        //         );
+        //         excel(cleaned, "assignments");
+        //       }}
+        //     >
+        //       Export to Excel
+        //     </Button>
+        //   </div>
+        // )}
         {...AssignmentTable.Props}
       />
       <input

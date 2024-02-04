@@ -13,14 +13,30 @@ const App = () => {
   const auth = useSelector((state: any) => state.auth.authIn);
   useEffect(() => {
     if (user) return;
-    if (cookie.get("token-ex"))
-      verifyToken(cookie.get("token-ex")).then((res) => {
-        if (res) {
-          dispatch({ type: "SET_USER", payload: res });
-        }
-      });
-    else {
+    if (cookie.get("token-ex")) {
+      console.log(cookie.get("token-ex"));
+      try {
+        verifyToken(cookie.get("token-ex"))
+          .then((res) => {
+            if (res) {
+              dispatch({ type: "SET_USER", payload: res });
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            cookie.remove("token-ex");
+            dispatch({ type: "NO_USER" });
+          });
+      } catch (e) {
+        // erase the token
+        console.log(e);
+        cookie.remove("token-ex");
+        dispatch({ type: "NO_USER" });
+      }
+    } else {
       dispatch({ type: "NO_USER" });
+      console.log("no token");
+      if (window.location.pathname !== "/") window.location.href = "/";
     }
   }, [user, auth]);
   return (

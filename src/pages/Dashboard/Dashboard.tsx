@@ -149,16 +149,22 @@ function Dashboard() {
                 autoClose: false,
                 loading: true,
               });
-              await deleteExaminer(row.row.original._id);
-              const _temp = examiners.filter(
-                (examiner) => examiner._id !== row.row.original._id
-              );
-              setExaminers(_temp);
-              localStorage.setItem("examiners", JSON.stringify(_temp));
-              dismissToastie();
-              toastify("Examiner removed successfully.", "success", {
-                autoClose: 1000,
-              });
+              try {
+                await deleteExaminer(row.row.original._id);
+                const _temp = examiners.filter(
+                  (examiner) => examiner._id !== row.row.original._id
+                );
+                setExaminers(_temp);
+                localStorage.setItem("examiners", JSON.stringify(_temp));
+                dismissToastie();
+                toastify("Examiner removed successfully.", "success", {
+                  autoClose: 1000,
+                });
+              } catch (err) {
+                toastify("Examiner could not be removed.", "error", {
+                  autoClose: 1000,
+                });
+              }
             }}
           >
             {" "}
@@ -242,25 +248,29 @@ function Dashboard() {
                 examiners.map(async (examiner: any) => {
                   try {
                     if (!res?.personalDetails?.name) {
-                      res["remarks"] = [...res["remarks"], "Name missing"];
+                      if (!res["remarks"].includes("Name missing"))
+                        res["remarks"] = [...res["remarks"], "Name missing"];
                     }
                     if (!res?.personalDetails?.collegeemail) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "College email missing",
-                      ];
+                      if (!res["remarks"].includes("College email missing"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "College email missing",
+                        ];
                     }
                     if (!res?.personalDetails?.phonenumber) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "Phone number missing",
-                      ];
+                      if (!res["remarks"].includes("Phone number missing"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "Phone number missing",
+                        ];
                     }
                     if (!res?.personalDetails?.personalEmail) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "Personal email missing",
-                      ];
+                      if (!res["remarks"].includes("Personal email missing"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "Personal email missing",
+                        ];
                     }
 
                     if (
@@ -273,7 +283,8 @@ function Dashboard() {
                         .toLowerCase()
                         .replace(/\s/g, "")
                     ) {
-                      res["remarks"] = [...res["remarks"], "Name exists"];
+                      // if (!res["remarks"].includes("Name exists"))
+                      //   res["remarks"] = [...res["remarks"], "Name exists"];
                     }
                     if (
                       examiner?.personalDetails?.collegeemail
@@ -285,10 +296,12 @@ function Dashboard() {
                         .toLowerCase()
                         .replace(/\s/g, "")
                     ) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "College email exists",
-                      ];
+                      if (!res["remarks"].includes("College email exists")) {
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "College email exists",
+                        ];
+                      }
                     }
                     if (
                       examiner?.personalDetails?.phonenumber
@@ -300,10 +313,11 @@ function Dashboard() {
                         .toLowerCase()
                         .replace(/\s/g, "")
                     ) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "Phone number exists",
-                      ];
+                      if (!res["remarks"].includes("Phone number exists"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "Phone number exists",
+                        ];
                     }
                     if (
                       examiner?.personalDetails?.personalEmail
@@ -315,35 +329,46 @@ function Dashboard() {
                         .toLowerCase()
                         .replace(/\s/g, "")
                     ) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "Personal email exists",
-                      ];
+                      // if check if personal email exists in remarks
+                      if (
+                        !res["remarks"].includes("Personal email exists") &&
+                        res?.personalDetails?.personalEmail !== "" &&
+                        res?.personalDetails?.personalEmail !== undefined
+                      ) {
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "Personal email exists",
+                        ];
+                      }
                     }
                   } catch (err) {}
                 });
                 newData.map(async (examiner: any) => {
                   try {
                     if (!res?.personalDetails?.name) {
-                      res["remarks"] = [...res["remarks"], "Name missing"];
+                      if (!res["remarks"].includes("Name missing"))
+                        res["remarks"] = [...res["remarks"], "Name missing"];
                     }
                     if (!res?.personalDetails?.collegeemail) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "College email missing",
-                      ];
+                      if (!res["remarks"].includes("College email missing"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "College email missing",
+                        ];
                     }
                     if (!res?.personalDetails?.phonenumber) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "Phone number missing",
-                      ];
+                      if (!res["remarks"].includes("Phone number missing"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "Phone number missing",
+                        ];
                     }
                     if (!res?.personalDetails?.personalEmail) {
-                      res["remarks"] = [
-                        ...res["remarks"],
-                        "Personal email missing",
-                      ];
+                      if (!res["remarks"].includes("Personal email missing"))
+                        res["remarks"] = [
+                          ...res["remarks"],
+                          "Personal email missing",
+                        ];
                     }
 
                     if (
@@ -356,7 +381,7 @@ function Dashboard() {
                         .toLowerCase()
                         .replace(/\s/g, "")
                     ) {
-                      res["remarks"] = [...res["remarks"], "Name exists"];
+                      // res["remarks"] = [...res["remarks"], "Name exists"];
                     }
                     if (
                       examiner?.personalDetails?.collegeemail
@@ -445,6 +470,8 @@ function Dashboard() {
         }}
         examiner={excelPop.examiner}
         universities={JSON.parse(localStorage.getItem("universities") || "{}")}
+        examiners={examiners}
+        setExaminers={setExaminers}
       />
     </div>
   );

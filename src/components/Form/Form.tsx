@@ -47,7 +47,7 @@ function Form(props: any) {
     _temp["travelDetails.manual"] = 0;
     _temp["travelDetails.city"] =
       _temp["instituteDetails.institutename"]?.split(",")[1];
-    _temp["travelDetails.kilometres"] = props.universities?.find(
+    _temp["travelDetails.kilometres"] = props?.universities?.find(
       (uni: any) => uni.name === _temp["instituteDetails.institutename"]
     )?.distance;
     if (_temp["travelDetails.kilometres"]) {
@@ -124,24 +124,29 @@ function Form(props: any) {
                     delete _temp[accessor];
                   }
                 );
-                if (
-                  JSON.stringify(_updates) === JSON.stringify(props.examiner)
-                ) {
-                  toastify("No update for examiner", "info");
-                } else {
-                  toastify("Updating examiner", "info", {
-                    loading: true,
-                    autoClose: false,
-                  });
-                  await updateExaminer({
-                    user: {
-                      id: _id,
-                      ..._updates,
-                    },
-                  });
-                  dismissToastie();
-                  toastify("Examiner updated", "success");
-                }
+                // console.log(
+                //   JSON.stringify(_updates) === JSON.stringify(props.examiner),
+                //   _updates,
+                //   props.examiner
+                // );
+                // if (
+                //   JSON.stringify(_updates) === JSON.stringify(props.examiner)
+                // ) {
+                //   toastify("No update for examiner", "info");
+                // } else {
+                toastify("Updating examiner", "info", {
+                  loading: true,
+                  autoClose: false,
+                });
+                await updateExaminer({
+                  user: {
+                    id: _id,
+                    ..._updates,
+                  },
+                });
+                dismissToastie();
+                toastify("Examiner updated", "success");
+                // }
 
                 Object.entries(form_input.form).map(
                   ([accessor, value]: any) => {
@@ -227,11 +232,11 @@ function Form(props: any) {
                     total: total,
                   },
                 };
-                toastify("Assigning examiner", "info", {
-                  loading: true,
-                  autoClose: false,
-                });
-                await addAssign(assignment);
+                // toastify("Assigning examiner", "info", {
+                //   loading: true,
+                //   autoClose: false,
+                // });
+                // await addAssign(assignment);
                 url += `travelled=${_updates["instituteDetails"]["institutename"]}&`;
                 url += `conveyer=${assignment["formDetails"]["conveyer"]}&`;
                 props.onClose();

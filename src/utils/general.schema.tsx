@@ -228,7 +228,7 @@ export const AssignmentTable: {
       className: styles.pagination,
       rowsPerPageOptions: [10, 50, 100],
     },
-    enableRowActions: true,
+    // enableRowActions: true,
     enableSelectAll: false,
     muiTableBodyRowProps: ({ row }: any) => ({
       className: styles.tableRow,

@@ -68,7 +68,7 @@ function Excel(props: any) {
                   <th>Bank Name</th>
                   <th>Account Number</th>
                   <th>Remarks</th>
-                  <th>Confirm</th>
+                  {/* <th>Confirm</th> */}
                 </tr>
 
                 {props.examiner &&
@@ -176,7 +176,7 @@ function Excel(props: any) {
                             })}
                         </td>
                         <td align="left">
-                          <Checkbox
+                          {/* <Checkbox
                             disabled={item.remarks && item.remarks.length > 0}
                             checked={
                               item.remarks &&
@@ -189,7 +189,7 @@ function Excel(props: any) {
                               temp[examiner.indexOf(item)] = e.target.checked;
                               setConfirmation(temp);
                             }}
-                          />
+                          /> */}
                         </td>
                       </tr>
                     );
@@ -241,25 +241,33 @@ function Excel(props: any) {
             }).length > 0
           }
           onClick={async () => {
+            const examiner = props.examiner;
             for (let i = 0; i < confirmation.length; i++) {
-              if (
-                confirmation[i] !== false &&
-                examiner[i]?.remarks.length === 0
-              ) {
+              if (confirmation[i] !== false) {
                 toastify(`Adding examiners`, "info", {
                   loading: true,
                   autoClose: false,
                 });
-                const task = await addExaminer(examiner[i]);
+                console.log(examiner[i]);
+                const task = await addExaminer({
+                  user: examiner[i],
+                });
                 if (task) {
-                  props.setExaminers([...props.examiners, examiner[i]]);
-                  localStorage.setItem(
-                    "examiners",
-                    JSON.stringify([...props.examiners, examiner[i]])
-                  );
-                  props.setExaminer([]);
-                  props.setExcel(false);
+                  // props.setExaminers([...props.examiners, examiner[i]]);
+                  // localStorage.setItem(
+                  //   "examiners",
+                  //   JSON.stringify([...props.examiners, examiner[i]])
+                  // );
+
+                  props.onClose();
                   dismissToastie();
+                  toastify(
+                    "Examiner added successfully. It'll be updated on refresh.",
+                    "success",
+                    {
+                      autoClose: 1000,
+                    }
+                  );
                 }
               }
             }

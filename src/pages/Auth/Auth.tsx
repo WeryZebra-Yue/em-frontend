@@ -34,7 +34,7 @@ function Auth() {
         console.log(response.token);
         cookie.set("token-ex", response.token, {
           path: "/",
-          // maxAge: 3600,
+          maxAge: 3600000,
         });
         dispatch({
           type: AUTH_IN,

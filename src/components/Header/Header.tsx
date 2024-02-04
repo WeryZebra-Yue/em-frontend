@@ -25,27 +25,37 @@ function Header() {
             <>
               {" "}
               {/* {user.admin ? ( */}
+              {user.admin && (
+                <Button
+                  variant="outlined"
+                  className={styles.button}
+                  onClick={() =>
+                    navigate(
+                      window.location.pathname === "/admin"
+                        ? "/dashboard"
+                        : "/admin"
+                    )
+                  }
+                >
+                  {window.location.pathname === "/admin"
+                    ? "Dashboard"
+                    : "Admin Panel"}
+                </Button>
+              )}
               <Button
                 variant="outlined"
                 className={styles.button}
                 onClick={() =>
                   navigate(
-                    window.location.pathname === "/admin"
+                    window.location.pathname === "/assignment"
                       ? "/dashboard"
-                      : "/admin"
+                      : "/assignment"
                   )
                 }
               >
-                {window.location.pathname === "/admin"
+                {window.location.pathname === "/assignment"
                   ? "Dashboard"
-                  : "Admin Panel"}
-              </Button>
-              <Button
-                variant="outlined"
-                className={styles.button}
-                onClick={() => navigate("/assignment")}
-              >
-                Assignments
+                  : "Assignment"}
               </Button>
               {/* ) : null} */}
               <Button

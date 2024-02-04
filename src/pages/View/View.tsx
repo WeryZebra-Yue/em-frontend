@@ -57,7 +57,8 @@ function View() {
       const _examiners = JSON.parse(localStorage.getItem("examiners") || "{}");
       const examiner = _examiners.filter(
         (examiner: any) =>
-          examiner.eid.toString().toLowerCase() === id?.toString().toLowerCase()
+          examiner?.eid?.toString()?.toLowerCase() ===
+          id?.toString()?.toLowerCase()
       );
       if (examiner.length === 0) {
         navigate("/add");

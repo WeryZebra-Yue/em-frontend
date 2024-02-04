@@ -12,26 +12,30 @@ import {
   getUniversities,
 } from "../../services/admin.service";
 
-// import styles from "./Assignment.module.css";
+import styles from "./Assignment.module.css";
 // import Button from "../../components/Button";
 import MaterialReactTable from "material-react-table";
 
 import { SET_LOADING } from "../../redux/Auth/AuthActions";
 import {
+  cleanifyAssignment,
   // cleanifyA/szssignment,
   dismissToastie,
+  excel,
   // excel,
   toastify,
 } from "../../utils/general.helper";
 // import { MenuItem } from "@mui/material";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Form from "../../components/Form";
 import Excel from "../../components/Excel";
+import { MenuItem } from "@mui/material";
+import Button from "../../components/Button";
 
 function Assignment() {
   const fileInput = useRef<any>(null);
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const [file, setFile] = useState<any>(null);
   const [formPop, setFormPop] = useState({
     open: false,
@@ -168,41 +172,41 @@ function Assignment() {
         //     <div className={styles.menuItem}>Remove </div>
         //   </MenuItem>,
         // ]}
-        // renderTopToolbarCustomActions={() => (
-        //   <div className={styles.topToolbar}>
-        //     {/* <Button
-        //       variant="outlined"
-        //       onClick={() => {
-        //         navigate("/add");
-        //       }}
-        //     >
-        //       Add Examiner
-        //     </Button>
-        //     <Button
-        //       variant="outlined"
-        //       onClick={() => {
-        //         if (fileInput.current) fileInput.current?.click();
-        //       }}
-        //     >
-        //       Import from Excel
-        //     </Button> */}
-        //     <Button
-        //       variant="outlined"
-        //       onClick={() => {
-        //         const cleaned = cleanifyAssignment(
-        //           Object.keys(rowSelection).length > 0
-        //             ? Object.keys(rowSelection).map(
-        //                 (key) => assignments[parseInt(key)]
-        //               )
-        //             : assignments
-        //         );
-        //         excel(cleaned, "assignments");
-        //       }}
-        //     >
-        //       Export to Excel
-        //     </Button>
-        //   </div>
-        // )}
+        renderTopToolbarCustomActions={() => (
+          <div className={styles.topToolbar}>
+            {/* <Button
+              variant="outlined"
+              onClick={() => {
+                navigate("/add");
+              }}
+            >
+              Add Examiner
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                if (fileInput.current) fileInput.current?.click();
+              }}
+            >
+              Import from Excel
+            </Button> */}
+            <Button
+              variant="outlined"
+              onClick={() => {
+                const cleaned = cleanifyAssignment(
+                  Object.keys(rowSelection).length > 0
+                    ? Object.keys(rowSelection).map(
+                        (key) => assignments[parseInt(key)]
+                      )
+                    : assignments
+                );
+                excel(cleaned, "assignments");
+              }}
+            >
+              Export to Excel
+            </Button>
+          </div>
+        )}
         {...AssignmentTable.Props}
       />
       <input

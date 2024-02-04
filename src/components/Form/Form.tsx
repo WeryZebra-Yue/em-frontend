@@ -232,11 +232,11 @@ function Form(props: any) {
                     total: total,
                   },
                 };
-                // toastify("Assigning examiner", "info", {
-                //   loading: true,
-                //   autoClose: false,
-                // });
-                // await addAssign(assignment);
+                toastify("Assigning examiner", "info", {
+                  loading: true,
+                  autoClose: false,
+                });
+                await addAssign(assignment);
                 url += `travelled=${_updates["instituteDetails"]["institutename"]}&`;
                 url += `conveyer=${assignment["formDetails"]["conveyer"]}&`;
                 props.onClose();

@@ -1,6 +1,5 @@
 import {
   Box,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContentText,

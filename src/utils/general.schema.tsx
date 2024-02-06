@@ -33,6 +33,20 @@ export const MetricTable: {
     "instituteDetails.role": {
       header: "Role of faculty",
     },
+    "personalDetails.areaofinterest": {
+      header: "Area of interest",
+      filterVariant: "comma",
+      enableColumnFilter: true,
+      Cell: ({ renderedCellValue }) => <div>{renderedCellValue}</div>,
+      accessorFn: (val) =>
+        val?.personalDetails?.areaofinterest
+          ? typeof val?.personalDetails?.areaofinterest === "object"
+            ? val?.personalDetails?.areaofinterest.join(", ")
+            : val?.personalDetails?.areaofinterest
+          : "N/A",
+      // default value
+      default: "N/A",
+    },
   },
   Props: {
     muiTableProps: {
@@ -124,6 +138,26 @@ export const AssignmentTable: {
     eid: {
       header: "ID",
     },
+    "examiner.personalDetails.name": {
+      header: "Name",
+    },
+    "examiner.personalDetails.phonenumber": {
+      header: "Mobile",
+      hide: true,
+    },
+    "examiner.instituteDetails.institutename": {
+      header: "Institute",
+    },
+    "examiner.personalDetails.personalEmail": {
+      header: "Personal Email",
+      hide: true,
+    },
+    "examiner.personalDetails.collegeemail": {
+      header: "Institute Mail",
+    },
+    "examiner.instituteDetails.role": {
+      header: "Role of faculty",
+    },
     "formDetails.date": {
       header: "Date",
     },
@@ -204,6 +238,9 @@ export const AssignmentTable: {
         "travelDetails.mode": false,
         // city
         "travelDetails.city": false,
+        "examiner.personalDetails.phonenumber": false,
+        "examiner.personalDetails.personalEmail": false,
+        "examiner.instituteDetails.role": false,
       },
       sorting: [
         {
@@ -228,7 +265,7 @@ export const AssignmentTable: {
       className: styles.pagination,
       rowsPerPageOptions: [10, 50, 100],
     },
-    // enableRowActions: true,
+    enableRowActions: true,
     enableSelectAll: false,
     muiTableBodyRowProps: ({ row }: any) => ({
       className: styles.tableRow,
@@ -253,6 +290,9 @@ export interface MetricHeader {
     filterSelectOptions?: string[];
     enableColumnFilter?: boolean;
     enableSorting?: boolean;
+    Cell?: (row: any) => any;
+    accessorFn?: (val: any) => any;
+    default?: any;
   };
 }
 

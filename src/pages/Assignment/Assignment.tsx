@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import Header from "../../components/Header/FHeader";
 import { AssignmentTable, _input } from "../../utils/general.schema";
 import {
+  deleteExaminer,
   // deleteExaminer,
   getAllExaminers,
   getAssignments,
@@ -31,6 +32,7 @@ import Form from "../../components/Form";
 import Excel from "../../components/Excel";
 // import { MenuItem } from "@mui/material";
 import Button from "../../components/Button";
+import { MenuItem } from "@mui/material";
 
 function Assignment() {
   const fileInput = useRef<any>(null);
@@ -99,8 +101,27 @@ function Assignment() {
         );
       }
       const assignments = await getAssignments();
-      setAssignments(assignments);
-      console.log(assignments);
+      // loop through the assignments and add the examiner details
+      // to the assignment
+      const _examiners = JSON.parse(localStorage.getItem("examiners") || "{}");
+      const _universities = JSON.parse(
+        localStorage.getItem("universities") || "{}"
+      );
+      const _assignments = assignments.map((assignment: any) => {
+        const examiner = _examiners.find(
+          (examiner: any) => examiner.eid === assignment.eid
+        );
+        const university = _universities.find(
+          (university: any) => university.uid === assignment.uid
+        );
+        return {
+          ...assignment,
+          examiner,
+          university,
+        };
+      });
+      setAssignments(_assignments);
+      console.log(_assignments);
       dismissToastie();
       toastify("Data fetched successfully.", "success", {
         autoClose: 1000,
@@ -124,54 +145,125 @@ function Assignment() {
         state={{ rowSelection }}
         selectedRows={rowSelection}
         onRowSelectionChange={setRowSelection}
-        // renderRowActionMenuItems={(row: any) => [
-        //   <MenuItem
-        //     key="edit"
-        //     onClick={() => {
-        //       navigate(`/edit/${row.row.original.eid}`, {
-        //         state: {
-        //           examiner: row.row.original,
-        //         },
-        //       });
-        //     }}
-        //   >
-        //     <div className={styles.menuItem}>Edit </div>
-        //   </MenuItem>,
-        //   <MenuItem
-        //     key="view"
-        //     onClick={() => {
-        //       setFormPop({
-        //         open: true,
-        //         examiner: row.row.original,
-        //       });
-        //     }}
-        //   >
-        //     <div className={styles.menuItem}>Assign</div>
-        //   </MenuItem>,
+        renderRowActionMenuItems={(row: any) => [
+          <MenuItem
+            key="delete"
+            onClick={() => {
+              toastify("Deleting assignment", "info", {
+                autoClose: false,
+                loading: true,
+              });
+              deleteExaminer(row.row.original._id).then(() => {
+                // const _examiners = JSON.parse(
+                //   localStorage.getItem("examiners") || "{}"
+                // );
+                const _assignments = assignments.filter(
+                  (assignment) => assignment._id !== row.row.original._id
+                );
+                setAssignments(_assignments);
 
-        //   <MenuItem
-        //     key="delete"
-        //     onClick={async () => {
-        //       toastify("Examiner is being removed.", "info", {
-        //         autoClose: false,
-        //         loading: true,
-        //       });
-        //       await deleteExaminer(row.row.original._id);
-        //       const _temp = examiners.filter(
-        //         (examiner) => examiner._id !== row.row.original._id
-        //       );
-        //       setExaminers(_temp);
-        //       localStorage.setItem("examiners", JSON.stringify(_temp));
-        //       dismissToastie();
-        //       toastify("Examiner removed successfully.", "success", {
-        //         autoClose: 1000,
-        //       });
-        //     }}
-        //   >
-        //     {" "}
-        //     <div className={styles.menuItem}>Remove </div>
-        //   </MenuItem>,
-        // ]}
+                dismissToastie();
+                toastify("Assignment deleted successfully.", "success", {
+                  autoClose: 1000,
+                });
+              });
+            }}
+          >
+            <div className={styles.menuItem}>Delete </div>
+          </MenuItem>,
+          <MenuItem
+            key="download"
+            onClick={() => {
+              // https://ppsudb.vercel.app/ta-da.html?school=School+of+Engineering&institute=P+P+Savani+School+of+Engineering%2C+Kosamba&course=tEST&examiner=+Karm+Balar&contact=8866393303&email=karm.balar%40ssasit.ac.in&degree=12&semester=123&code=21&mode=Car&date=19%2F11%2F2023&travelled=P+P+Savani+School+of+Engineering%2C+Kosamba&city=232&bank=State+Bank+of+India&branch=123&account=test&ifsc=1&kilometres=0&ta=0&da=200&total=200&conveyer=VARUN+THUMMAR
+              // {
+              //   "_id": "65bf75ccb3cfdd31a4ba1aaa",
+              //   "eid": "SOE0002",
+              //   "formDetails": {
+              //       "date": "2024-02-06",
+              //       "conveyer": "Barkha Wadhwani",
+              //       "course": "Computer Engineering",
+              //       "code": "SECE2023",
+              //       "semester": "7",
+              //       "degree": "Degree"
+              //   },
+              //   "travelDetails": {
+              //       "mode": "Car",
+              //       "city": "Surat",
+              //       "kilometres": 23,
+              //       "da": 200,
+              //       "ta": 460,
+              //       "manual": 0,
+              //       "institute": "Shroff S R  Rotary Insitute of Chemical Technology"
+              //   },
+              //   "payDetails": {
+              //       "total": 202
+              //   },
+              //   "__v": 0,
+              //   "examiner": {
+              //       "_id": "636514d64a0675175ece9124",
+              //       "personalDetails": {
+              //           "name": " Mital Patel",
+              //           "phonenumber": 9925938357,
+              //           "collegeemail": "mital.patel@srict.in"
+              //       },
+              //       "instituteDetails": {
+              //           "institutename": "Shroff S R  Rotary Insitute of Chemical Technology"
+              //       },
+              //       "roles": [
+              //           "Paper Setter & Examiner",
+              //           null,
+              //           null,
+              //           "Paper Setter & Examiner",
+              //           "Examiner"
+              //       ],
+              //       "e_id": "SOE",
+              //       "eid": "SOE0002",
+              //       "bankDetails": {
+              //           "bankName": "SBI",
+              //           "accountNumber": "200DSNKDSKN",
+              //           "branch": "Surat",
+              //           "ifscCode": "20SE02C"
+              //       }
+              //   },
+              //   "university": {
+              //       "_id": "6367882e566db8c9d84784cb",
+              //       "name": "Alpha College of Engineering & Technology, Gandhinagar ",
+              //       "distance": 253
+              //   }
+              const _row = row.row.original;
+              const _input = {
+                school: _row?.university?.name,
+                institute: _row?.university?.name,
+                course: _row?.formDetails?.course,
+                examiner: _row?.examiner?.personalDetails?.name,
+                contact: _row?.examiner?.personalDetails?.phonenumber,
+                email: _row?.examiner?.personalDetails?.collegeemail,
+                degree: _row?.formDetails?.degree,
+                semester: _row?.formDetails?.semester,
+                code: _row?.formDetails?.code,
+                mode: _row?.travelDetails?.mode,
+                date: _row?.formDetails?.date,
+                travelled: _row?.travelDetails?.institute,
+                city: _row?.travelDetails?.city,
+                bank: _row?.examiner?.bankDetails?.bankName,
+                branch: _row?.examiner?.bankDetails?.branch,
+                account: _row?.examiner?.bankDetails?.accountNumber,
+                ifsc: _row?.examiner?.bankDetails?.ifscCode,
+                kilometres: _row?.university?.distance,
+                ta: _row?.travelDetails?.ta,
+                da: _row?.travelDetails?.da,
+                total: _row?.payDetails?.total,
+                conveyer: _row?.travelDetails?.conveyer,
+              };
+
+              const url = new URL("/ta-da.html", "http://ppsudb.vercel.app");
+              url.search = new URLSearchParams(_input).toString();
+              window.open(url.toString(), "_blank");
+            }}
+          >
+            <div className={styles.menuItem}>Download form</div>
+          </MenuItem>,
+        ]}
         renderTopToolbarCustomActions={() => (
           <div className={styles.topToolbar}>
             {/* <Button

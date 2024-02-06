@@ -165,3 +165,13 @@ export const getAssignments = async () => {
     throw err;
   }
 };
+export const deleteAssignment = async (id: any) => {
+  try {
+    const { data } = await axios.post(ADMIN_URL + "/deleteAssignment", {
+      id: id,
+    });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

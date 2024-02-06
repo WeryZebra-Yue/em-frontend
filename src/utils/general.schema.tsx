@@ -140,23 +140,29 @@ export const AssignmentTable: {
     },
     "examiner.personalDetails.name": {
       header: "Name",
+      enableEditing: false,
     },
     "examiner.personalDetails.phonenumber": {
       header: "Mobile",
       hide: true,
+      enableEditing: false,
     },
     "examiner.instituteDetails.institutename": {
       header: "Institute",
+      enableEditing: false,
     },
     "examiner.personalDetails.personalEmail": {
       header: "Personal Email",
       hide: true,
+      enableEditing: false,
     },
     "examiner.personalDetails.collegeemail": {
       header: "Institute Mail",
+      enableEditing: false,
     },
     "examiner.instituteDetails.role": {
       header: "Role of faculty",
+      enableEditing: false,
     },
     "formDetails.date": {
       header: "Date",
@@ -191,12 +197,14 @@ export const AssignmentTable: {
     },
     "travelDetails.ta": {
       header: "TA",
+      enableEditing: false,
     },
     "travelDetails.manual": {
       header: "Manual",
     },
     "payDetails.total": {
       header: "Total",
+      enableEditing: false,
     },
 
     // eid: {
@@ -229,6 +237,7 @@ export const AssignmentTable: {
     muiTableHeadRowProps: {
       className: styles.tableRow,
     },
+    enableEditing: true,
     enableColumnOrdering: true,
     enableGrouping: true,
     enablePinning: true,
@@ -293,6 +302,7 @@ export interface MetricHeader {
     Cell?: (row: any) => any;
     accessorFn?: (val: any) => any;
     default?: any;
+    enableEditing?: boolean;
   };
 }
 

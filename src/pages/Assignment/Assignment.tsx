@@ -11,6 +11,7 @@ import {
   getAssignments,
   getMetaData,
   getUniversities,
+  updateAssignment,
 } from "../../services/admin.service";
 
 import styles from "./Assignment.module.css";
@@ -145,6 +146,84 @@ function Assignment() {
         state={{ rowSelection }}
         selectedRows={rowSelection}
         onRowSelectionChange={setRowSelection}
+        onEditingRowSave={async ({ row, table, values }) => {
+          // console.log(values);
+          const doc_id = row.original._id;
+          const _values = values;
+          Object.keys(_values).map((key) => {
+            if (key.includes(".")) {
+              const [first, second] = key.split(".");
+              if (key.split(".").length === 2) {
+                _values[first] = {
+                  ..._values[first],
+                  [second]: _values[key],
+                };
+                delete _values[key];
+                // console.log(first, second);
+              } else if (key.split(".").length === 3) {
+                const [first, second, third] = key.split(".");
+                console.log(first, second, third);
+
+                _values[first] = {
+                  ..._values[first],
+                };
+                _values[first][second] = {
+                  ..._values[first][second],
+                  [third]: _values[key],
+                };
+                delete _values[key];
+              }
+            }
+          });
+          const _update = {
+            id: doc_id,
+            eid: _values.eid,
+            formDetails: {
+              date: _values.formDetails.date,
+              conveyer: _values.formDetails.conveyer,
+              course: _values.formDetails.course,
+              code: _values.formDetails.code,
+              semester: _values.formDetails.semester,
+              degree: _values.formDetails.degree,
+            },
+            travelDetails: {
+              mode: _values.travelDetails.mode,
+              city: _values.travelDetails.city,
+              kilometres: parseInt(_values.travelDetails.kilometres),
+              da: parseInt(_values.travelDetails.da),
+              ta: parseInt(_values.travelDetails.kilometres) * 20,
+              manual: parseInt(_values.travelDetails.manual),
+              institute: _values.examiner.instituteDetails.institutename,
+            },
+            payDetails: {
+              total:
+                (parseInt(_values.travelDetails.manual) === 0
+                  ? parseInt(_values.travelDetails.kilometres) * 20
+                  : parseInt(_values.travelDetails.manual)) +
+                parseInt(_values.travelDetails.ta) +
+                parseInt(_values.travelDetails.da),
+            },
+          };
+          toastify("Updating assignment", "info", {
+            autoClose: false,
+            loading: true,
+          });
+          const _assignments = assignments.filter(
+            (assignment) => assignment._id !== doc_id
+          );
+          _assignments.push(_values);
+          setAssignments(_assignments);
+          updateAssignment(_update).then(() => {
+            dismissToastie();
+            table.setEditingRow(null); //exit editing mode
+            toastify("Assignment updated successfully.", "success", {
+              autoClose: 1000,
+            });
+            toastify("Please refresh before downloading the form.", "warning", {
+              autoClose: false,
+            });
+          });
+        }}
         renderRowActionMenuItems={(row: any) => [
           <MenuItem
             key="delete"
@@ -231,6 +310,8 @@ function Assignment() {
               //       "distance": 253
               //   }
               const _row = row.row.original;
+              // const assignment = _row;
+              console.log(_row);
               const _input = {
                 school: _row?.university?.name,
                 institute: _row?.university?.name,
